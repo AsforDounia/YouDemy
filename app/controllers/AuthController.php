@@ -1,0 +1,111 @@
+<?php 
+require_once (__DIR__.'/../models/User.php');
+class AuthController extends BaseController {
+ 
+   protected $UserModel ;
+   public function __construct(){
+
+      $this->UserModel = new User();
+
+      
+   }
+
+
+    public function showLoginForm()
+    {
+        $this->render('auth/login');
+    }
+
+    public function login($em = null, $pass = null){
+        if($em != null && $pass != null ){
+            $email = $em;
+            $password = $pass;
+        }
+        else{
+            $email = $_POST['email'] ?? '';
+            $password = $_POST['password'] ?? '';
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($password)) {
+                $_SESSION['error'] = 'Email ou mot de passe invalide.';
+                header('Location: /login');
+                exit;
+            }
+        }
+
+        $user = $this->UserModel->findByEmail($email);
+        if (!$user || !password_verify($password, $user['password'])) {
+            $_SESSION['error'] = 'Identifiants incorrects.';
+            header('Location: /login');
+            exit;
+        }
+
+        $_SESSION['user'] = [
+            'id' => $user['user_id'],
+            'name' => $user['full_name'],
+            'role' => $user['role'],
+        ];
+
+
+        switch ($user['role']) {
+            case 'Admin':
+                header('Location: /admin/dashboard');
+                break;
+            case 'Teacher':
+                header('Location: /teacher/dashboard');
+                break;
+            case 'Student':
+                header('Location: /student/dashboard');
+                break;
+        }
+        exit;
+    }
+
+    public function showRegisterForm(){
+        $this->render('auth/register');
+    }
+
+    public function register(){
+        $name = $_POST['name'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+        $role = $_POST['role'] ?? '';
+
+        if (empty($name) || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($role, ['student', 'teacher'])) {
+            $_SESSION['error'] = 'Veuillez remplir correctement tous les champs.';
+            header('Location: /register');
+            exit;
+        }
+
+        if ($this->UserModel->findByEmail($email)) {
+            $_SESSION['error'] = 'Cet email est déjà utilisé.';
+            header('Location: /register');
+            exit;
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+        $this->UserModel->createNewUser([
+            'name' => $name,
+            'email' => $email,
+            'password' => $hashedPassword,
+            'role' => $role,
+        ]);
+        $this->login($email, $password );
+
+        // $_SESSION['success'] = 'Inscription réussie. Veuillez vous connecter.';
+        // header('Location: /login');
+        exit;
+    }
+
+
+    public function logout(){
+        session_start();
+        session_unset();
+        session_destroy();
+        header('Location: /login');
+        exit;
+    }
+}
+
+
+
+
