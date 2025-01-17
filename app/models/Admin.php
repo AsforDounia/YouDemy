@@ -8,19 +8,39 @@ class Admin extends User {
         parent::__construct();
     }
 
-    public function getAllUsers()
-    {
-        $query = "SELECT * FROM users WHERE user_id != :user_id GROUP BY role";
+    public function getAllUsers($start = null , $length = null){
+        if($start != null && $length != null){
+            $query = "SELECT * FROM users WHERE user_id != :user_id LIMIT :start, :length GROUP BY role";
+
+        }
+        else{
+            $query = "SELECT * FROM users WHERE user_id != :user_id";
+        }
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $_SESSION['user']['id']);
+
+        if($start != null && $length != null){
+            $stmt->bindParam(':start', $start);
+            $stmt->bindParam(':length', $length);
+        }
+
+        $stmt->execute();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $users;
+    }
+    public function searchUsers($search_value){
+        $query = "SELECT * FROM users WHERE user_id != :user_id AND (username LIKE :search_value OR email LIKE :search_value) GROUP BY role";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':user_id', $_SESSION['user']['id']);
+        $stmt->bindParam(':search_value', '%' . $search_value . '%');
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
 
-    public function changeStatus($userId, $status) {
+    public function changeStatusOfUser($userId, $status) {
         try {
-            $stmt = $this->conn->prepare("UPDATE users SET status = ? WHERE id = ?");
+            $stmt = $this->conn->prepare("UPDATE users SET status = ? WHERE user_id = ?");
             $stmt->execute([$status, $userId]);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
@@ -29,25 +49,20 @@ class Admin extends User {
 
     public function deleteUser($userId) {
         try {
-            $stmt = $this->conn->prepare("DELETE FROM users WHERE id = ?");
+            $stmt = $this->conn->prepare("DELETE FROM users WHERE user_id = ?");
             $stmt->execute([$userId]);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     }
 
-    public function getTotalUsers()
-    {
-        $query = "SELECT COUNT(*) as total FROM users WHERE role != 'admin'";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchColumn();
+    public function changeUserRole($userId , $userRole){
+        try {
+            $stmt = $this->conn->prepare("UPDATE users SET role = ? WHERE user_id = ?");
+            $stmt->execute([$userRole, $userId]);
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
     }
 
-    public function getRecentActivities()
-    {
-        // Placeholder for recent activities logic
-        // This should be implemented based on your application's requirements
-        return []; // Return an empty array for now
-    }
 }

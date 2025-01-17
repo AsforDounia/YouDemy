@@ -34,8 +34,8 @@
 
                 <form action="/register" method="POST">
                     <div class="mb-4">
-                        <label for="name" class="block text-gray-700">Name:</label>
-                        <input type="text" id="name" name="name" placeholder="Enter your name" required
+                        <label for="fullname" class="block text-gray-700">Full Name:</label>
+                        <input type="text" id="fullname" name="fullname" placeholder="Enter your Full Name" required
                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                     </div>
 
@@ -54,8 +54,8 @@
                         <label for="role" class="block text-gray-700">Role:</label>
                         <select name="role" id="role" required
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option value="student">Student</option>
-                            <option value="teacher">Teacher</option>
+                            <option value="Student">Student</option>
+                            <option value="Teacher">Teacher</option>
                         </select>
                     </div>
 

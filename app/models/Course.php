@@ -6,6 +6,33 @@ class Course extends Db {
         parent::__construct();
     }
 
+    public function getAllCourses() {
+        $query = "SELECT * FROM courses";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function getTotalCourses() {
+        $query = "SELECT COUNT(*) FROM courses";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchColumn();
+        return $result;
+    }
+
+    // Le cour avec le plus d' étudiants
+    public function getMostPopularCourse() {
+        $query = "SELECT * FROM courses ORDER BY nb_etudiants DESC LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+        }
+
+
+
     public function createCourse($data) {
         $sql = "INSERT INTO courses (title, description, content, tags, category, teacher_id) VALUES (:title, :description, :content, :tags, :category, :teacher_id)";
         $stmt = $this->conn->prepare($sql);
@@ -31,5 +58,13 @@ class Course extends Db {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute(['teacher_id' => $teacherId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // New Courses
+    public function getNewCourses() {
+        $sql = "SELECT * FROM courses ORDER BY created_at DESC LIMIT 3";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -9,7 +9,11 @@ class AuthController extends BaseController {
 
       
    }
+public function dashboardx(){
+    $this->render('admin/dashboardx');
 
+
+}
 
     public function showLoginForm()
     {
@@ -64,32 +68,54 @@ class AuthController extends BaseController {
     }
 
     public function register(){
-        $name = $_POST['name'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
-        $role = $_POST['role'] ?? '';
-
-        if (empty($name) || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($role, ['student', 'teacher'])) {
+        $fullname = $_POST['fullname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $role = $_POST['role'];
+        if($_SERVER['REQUEST_URI'] != '/register'){
+            
+            $roleArray = ['Admin', 'Teacher', 'Student'];
+            $location = 'Location: /admin/displayForm/addUser';
+        }
+        else{
+            $location = 'Location: /register';
+            $roleArray = ['Teacher', 'Student'];
+        }
+        if (empty($fullname) || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($role, $roleArray)) {
             $_SESSION['error'] = 'Veuillez remplir correctement tous les champs.';
-            header('Location: /register');
+            header($location);
             exit;
         }
 
+
+        $usersTotal = $this->UserModel->getTotalUsers();
+        if( $usersTotal == 0 ){
+            $role = 'Admin';
+        }
+
+        
         if ($this->UserModel->findByEmail($email)) {
             $_SESSION['error'] = 'Cet email est déjà utilisé.';
-            header('Location: /register');
+            header($location);
             exit;
         }
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-
+        
         $this->UserModel->createNewUser([
-            'name' => $name,
+            'fullname' => $fullname,
             'email' => $email,
             'password' => $hashedPassword,
             'role' => $role,
         ]);
-        $this->login($email, $password );
+
+        if($_SERVER['REQUEST_URI'] != '/register'){
+            header($location);
+        }
+        else{
+            $this->login($email, $password );
+            // var_dump($location);die();
+        }
 
         // $_SESSION['success'] = 'Inscription réussie. Veuillez vous connecter.';
         // header('Location: /login');

@@ -66,7 +66,7 @@
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Vous n'avez pas de compte?
-                        <a href="signup.html"
+                        <a href="/register"
                             class="ml-1 text-indigo-600 hover:text-indigo-800 font-medium flex items-center justify-center space-x-1 mx-auto mt-1">
                             <span>Inscrivez-vous</span>
                             <i class="fas fa-chevron-right text-sm"></i>
