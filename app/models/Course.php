@@ -7,7 +7,7 @@ class Course extends Db {
     }
 
     public function getAllCourses() {
-        $query = "SELECT * FROM courses";
+        $query = "SELECT * FROM Courses INNER JOIN Categories ON Courses.category_id = Categories.category_id INNER JOIN Users ON Courses.teacher_id = Users.user_id;";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -66,5 +66,12 @@ class Course extends Db {
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function deleteCourse($course_id){
+        $sql = "DELETE FROM courses WHERE course_id = :course_id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['course_id' => $course_id]);
+        return true;
     }
 }

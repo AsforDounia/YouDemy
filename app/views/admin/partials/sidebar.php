@@ -25,7 +25,7 @@
             </a>
         </li>
         <li class="mr-3 flex-1 group">
-            <a href="#" class="block py-1 md:py-3 pl-1 align-middle text-black no-underline border-b-2 border-gray-800 group-hover:border-purple-800 ">
+            <a href="/admin/dashboard/manageCourses" class="block py-1 md:py-3 pl-1 align-middle text-black no-underline border-b-2 border-gray-800 group-hover:border-purple-800 ">
                 <i class="fa fa-envelope pr-0 md:pr-3 group-hover:text-purple-800 "></i><span class="pb-1 md:pb-0 text-xs md:text-base text-black group-hover:text-purple-800   block md:inline-block">Courses</span>
             </a>
         </li>

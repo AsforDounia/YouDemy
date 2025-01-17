@@ -52,7 +52,7 @@ class AdminController extends BaseController
             ];
         }
         $data += [
-            'allUsers' => $this->AdminModel->getAllUsers(),
+            // 'allUsers' => $this->AdminModel->getAllUsers(),
             'totalUsers' => $this->UserModel->getTotalUsers(),
             'totalCourses' => $this->CourseModel->getTotalCourses(),
             'mostPopularCourse' => $this->EnrollmentModel->getMostEnrolledCourse(),
@@ -121,6 +121,21 @@ class AdminController extends BaseController
     }
 
 
+
+    public function manageCourses(){
+ 
+        $data = [
+            'courses' => $this->CourseModel->getAllCourses(),
+        ];
+        // var_dump($data);die();
+        $this->render('admin/manageCourses', $data);
+        exit;
+    }
+
+    public function deleteCourse($course_id){
+        $this->CourseModel->deleteCourse($course_id);
+        $this->manageCourses();
+    }
 
 
 

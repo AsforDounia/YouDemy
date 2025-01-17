@@ -34,9 +34,11 @@ Route::get('/admin/dashboard/manageUsers', [AdminController::class, 'manageUsers
 Route::get('/admin/changeStatusOfUser/{user_id}', [AdminController::class, 'changeStatusOfUser']);
 Route::get('/admin/displayRoleForm/{user_id}', [AdminController::class, 'displayRoleForm']);
 Route::post('/admin/ChangeUserRole', [AdminController::class, 'changeUserRole']);
-
 Route::get('/admin/deleteUser/{user_id}', [AdminController::class, 'deleteUser']);
 
+
+Route::get('/admin/dashboard/manageCourses', [AdminController::class, 'manageCourses']);
+Route::get('/admin/deleteCourse/{course_id}', [AdminController::class, 'deleteCourse']);
 
 
 // Route::get('/pagination', [AdminController::class, 'pagination']);
