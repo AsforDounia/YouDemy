@@ -8,26 +8,17 @@ class Admin extends User {
         parent::__construct();
     }
 
-    public function getAllUsers($start = null , $length = null){
-        if($start != null && $length != null){
-            $query = "SELECT * FROM users WHERE user_id != :user_id LIMIT :start, :length GROUP BY role";
-
-        }
-        else{
-            $query = "SELECT * FROM users WHERE user_id != :user_id";
-        }
+    public function getAllUsers(){
+        $query = "SELECT * FROM users WHERE user_id != :user_id ORDER BY created_at DESC";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':user_id', $_SESSION['user']['id']);
-
-        if($start != null && $length != null){
-            $stmt->bindParam(':start', $start);
-            $stmt->bindParam(':length', $length);
-        }
 
         $stmt->execute();
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $users;
     }
+
+
     public function searchUsers($search_value){
         $query = "SELECT * FROM users WHERE user_id != :user_id AND (username LIKE :search_value OR email LIKE :search_value) GROUP BY role";
         $stmt = $this->conn->prepare($query);
@@ -56,13 +47,13 @@ class Admin extends User {
         }
     }
 
-    public function changeUserRole($userId , $userRole){
-        try {
-            $stmt = $this->conn->prepare("UPDATE users SET role = ? WHERE user_id = ?");
-            $stmt->execute([$userRole, $userId]);
-        } catch (PDOException $e) {
-            echo "Error: " . $e->getMessage();
-        }
-    }
+    // public function changeUserRole($userId , $userRole){
+    //     try {
+    //         $stmt = $this->conn->prepare("UPDATE users SET role = ? WHERE user_id = ?");
+    //         $stmt->execute([$userRole, $userId]);
+    //     } catch (PDOException $e) {
+    //         echo "Error: " . $e->getMessage();
+    //     }
+    // }
 
 }

@@ -72,12 +72,15 @@ public function dashboardx(){
         $email = $_POST['email'];
         $password = $_POST['password'];
         $role = $_POST['role'];
+        $compteStatus = 'Active';
         if($_SERVER['REQUEST_URI'] != '/register'){
-            
             $roleArray = ['Admin', 'Teacher', 'Student'];
-            $location = 'Location: /admin/displayForm/addUser';
+            $location = 'Location: /admin/dashboard';
         }
         else{
+            if($role == 'Teacher'){
+                $compteStatus = 'Suspended';
+            }
             $location = 'Location: /register';
             $roleArray = ['Teacher', 'Student'];
         }
@@ -107,6 +110,7 @@ public function dashboardx(){
             'email' => $email,
             'password' => $hashedPassword,
             'role' => $role,
+            'compteStatus' => $compteStatus
         ]);
 
         if($_SERVER['REQUEST_URI'] != '/register'){

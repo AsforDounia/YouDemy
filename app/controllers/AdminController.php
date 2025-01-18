@@ -37,8 +37,15 @@ class AdminController extends BaseController
      */
 
     public function displayForm($form){
-        $this->adminDashboard($form);
+        
+        if(strpos($_SERVER['REQUEST_URI'], 'addCategory') !== false || strpos($_SERVER['REQUEST_URI'], 'editCategory') !== false){
+            $this->manageCategories($form);
+        }
+        elseif(strpos($_SERVER['REQUEST_URI'], 'addUser') !== false){
+            $this->adminDashboard($form);
+        }
     }
+
     public function adminDashboard($form = null){
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header('Location: /login');
@@ -62,6 +69,7 @@ class AdminController extends BaseController
             'NewCourses' => $this->CourseModel->getNewCourses(),
 
         ];
+
         $this->render('admin/dashboardx', $data);
     }
 
@@ -84,15 +92,16 @@ class AdminController extends BaseController
 
     public function changeStatusOfUser($user_id){
         $user = $this->UserModel->findByID($user_id);
-        if($user['status'] == "Disabled"){
+        if($user['status'] == "Suspended"){
             $status = "Active";
         }
         else{
-            $status = "Disabled";
+            $status = "Suspended";
         }
         $this->AdminModel->changeStatusOfUser($user_id,$status);
 
-        $this->manageUsers();
+        header('Location: /admin/dashboard/manageUsers');
+        
         exit;
 
     }
@@ -104,18 +113,18 @@ class AdminController extends BaseController
         // $userRole = $this->UserModel->findRole($user_id);
     }
 
-    public function changeUserRole(){
-        $user_id = (int)$_POST['user_id'];
-        $role = $_POST['role'];
-        $this->AdminModel->changeUserRole($user_id,$role);
-        $this->manageUsers();
-        exit;
-
-    }
+    // public function changeUserRole(){
+    //     $user_id = (int)$_POST['user_id'];
+    //     $role = $_POST['role'];
+    //     $this->AdminModel->changeUserRole($user_id,$role);
+    //     header('Location: /admin/dashboard/manageUsers');
+    //     exit;
+    // }
 
     public function deleteUser($user_id){
         $this->AdminModel->deleteUser($user_id);
-        $this->manageUsers();
+        header('Location: /admin/dashboard/manageUsers');
+
         exit;
 
     }
@@ -123,22 +132,63 @@ class AdminController extends BaseController
 
 
     public function manageCourses(){
- 
         $data = [
             'courses' => $this->CourseModel->getAllCourses(),
         ];
-        // var_dump($data);die();
         $this->render('admin/manageCourses', $data);
         exit;
     }
 
     public function deleteCourse($course_id){
         $this->CourseModel->deleteCourse($course_id);
-        $this->manageCourses();
+        header('Location: /admin/dashboard/manageCourses');
     }
 
 
+    public function manageCategories($form = null){
+        $data = [];
+        if($form != null){
+            if($form === 'addCategory'){
+                $data = [
+                    'formAddCat' => $form,
+                ];
+            }
+            elseif($form === 'editCategory'){
+                $data = [
+                    'formEditCat' => $form,
+                ];
+            }
 
+        }
+        $data += [
+            'categories' => $this->CategoryModel->getAllCategories(),
+        ];
+        // var_dump($data);die();
+        $this->render('admin/manageCategories', $data);
+        exit;
+    }
+
+    public function addCategory(){
+        $categoryName = $_POST['categoryName'];
+        $this->CategoryModel->addCategory($categoryName);
+        header('Location: /admin/dashboard/manageCategories');
+        exit;
+    }
+
+    public function deleteCategory($categoryID){
+        $this->CategoryModel->deleteCategory($categoryID);
+        header('Location: /admin/dashboard/manageCategories');
+        exit;
+    }
+
+
+    public function editCategory(){
+        $categoryID = $_POST['category_id'];
+        $categoryName = $_POST['categoryName'];
+        $this->CategoryModel->modifyCategory($categoryID, $categoryName);
+        header('Location: /admin/dashboard/manageCategories');
+        exit;
+    }
 
 
 

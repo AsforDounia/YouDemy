@@ -1,69 +1,88 @@
-<?php require_once 'partials/header.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
 
+    <title>Youdemy Platform</title>
+</head>
 
-        <?php require_once 'partials/sidebar.php'; ?>
-        <div class="flex justify-center w-full h-screen pt-8">
-            <div class="bg-white p-6 rounded-xl shadow">
-            <table>
-                <thead>
-                    <tr>
-                        <th class="border-2 px-4 py-2">Picture</th>
-                        <th class="border-2 px-4 py-2">ID</th>
-                        <th class="border-2 px-4 py-2">Full Name</th>
-                        <th class="border-2 px-4 py-2">Email</th>
-                        <th class="border-2 px-4 py-2">Role</th>
-                        <th class="border-2 px-4 py-2">Compte Status</th>
-                        <th class="border-2 px-4 py-2">Created_at</th>
-                        <th class="border-2 px-4 py-2">Updated_at</th>
-                        <th class="border-2 px-4 py-2">Actions</th>
-                    </tr>
-                </thead>
-                <tbody >
-                    <?php foreach($data['users'] as $user): ?>
-                        <?php if($user['status'] == 'Disabled'){
-                            $textColor = "text-red-600" ;
-                        }
-                        else{
-                            $textColor = "text-green-600" ;
-                        }
-                        ?>
-                        <tr>
-                            <td class="border-2 px-4 py-2"><?= $user['profile_picture']; ?></td>
-                            <td class="border-2 px-4 py-2"><?= $user['user_id']; ?></td>
-                            <td class="border-2 px-4 py-2"><?= $user['full_name']; ?></td>
-                            <td class="border-2 px-4 py-2"><?= $user['email']; ?></td>
-                            <td class="border-2 px-4 py-2"><?= $user['role']; ?></td>
-                            <td class="border-2 px-4 py-2"><a class=<?= $textColor ?> href="/admin/changeStatusOfUser/<?=$user['user_id']?>"> <?= $user['status']; ?></a></td>
-                            <td class="border-2 px-4 py-2"><?= $user['created_at']; ?></td>
-                            <td class="border-2 px-4 py-2"><?= $user['updated_at']; ?></td>
-                            <td class="border-2 px-4 py-2">
-                                <a href="/admin/displayRoleForm/<?= $user['user_id']; ?>" class="py-2 px-4"><i class="hover:text-blue-700 fas fa-pencil-alt text-blue-500"></i></a>
-                                <span>|</span>
-                                <a href="/admin/deleteUser/<?=$user['user_id']?>" class="py-2 px-4"><i class="hover:text-red-700 fas fa-trash text-red-500"></i></a>
-                            </td>
-
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-
-            </table>
-        </div>
-        </div>
-
-    </div>
-
-    <?php if(isset($data['user_id'])) : ?>
-        <div id="quickAction" class="fixed bg-[rgba(0,0,0,0.9)] flex justify-center items-center p-6 w-screen h-screen top-0 left-0 z-50">
-            <div class="bg-white p-6 pt-2 rounded-xl shadow">
-                <div class="flex justify-end items-center ">
-                    <button onclick="hideElement('quickAction')"><i class="fas fa-times text-indigo-600 hover:text-indigo-700 transition-colors"></i></button>
-
+<body>
+    <div class="flex">
+        <?php include('partials/header.php'); ?>
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 lg:ml-64">
+            <?php include('partials/sidebar.php'); ?>
+            <!-- Main -->
+            <main class="flex-1 bg-gray-100 min-h-screen overflow-y-auto py-24 px-20">
+                <h1 class="text-xl font-bold text-gray-700 my-10">Users</h1>
+                <!-- fiter and search -->
+                <div class="flex items-center justify-between space-x-4 bg-white p-4 px-8 rounded-lg shadow-md">
+                    <!-- Search Bar -->
+                    <div class="flex items-center bg-gray-100 border border-gray-300 rounded px-3 w-3/4">
+                        <i class="bx bx-search text-gray-400 text-lg"></i>
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            class="w-full bg-transparent border-none outline-none py-2 px-2 text-gray-800" />
+                    </div>
+                    <!-- User Role Dropdown -->
+                    <select class="bg-gray-100 border border-gray-300 text-gray-800 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/5">
+                        <option value="teachers">All</option>
+                        <option value="teachers">Teachers</option>
+                        <option value="students">Students</option>
+                    </select>
                 </div>
-            <?php require_once 'addForms/editUserRole.php'; ?>
+
+                <!-- users table -->
+                <table class="min-w-full table-auto bg-white border border-gray-300 rounded-lg shadow-md mt-10">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Profile Picture</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Full Name</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Email</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Role</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Status</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">Created At</th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700"></th>
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($data['users'] as $user): ?>
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="px-8 py-2">
+                                    <?php if (!$user['profile_picture']): ?>
+                                        <div class="w-14 h-14 flex items-center justify-center bg-gray-200 text-gray-500 text-xs rounded-full">
+                                            No Pic
+                                        </div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($user['full_name']) ?></td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($user['email']) ?></td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($user['role']) ?></td>
+                                <td class="px-4 py-2 text-sm text-gray-600">
+                                    <a class="inline-block py-1 px-2 text-xs font-semibold <?= $user['status'] === 'Active' ? 'text-green-800 bg-green-100' : 'text-yellow-800 bg-yellow-100' ?> rounded-full" href="/admin/changeStatusOfUser/<?=$user['user_id']?>"><?= $user['status']; ?></a>
+                                </td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($user['created_at']) ?></td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><a href="/admin/deleteUser/<?= $user['user_id']; ?>" onclick="return confirm('Are you sure you want to delete this user?')"  class="text-[#2E5077] hover:underline">Delete</a></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </main>
         </div>
-        </div>
-    <?php endif ?>
+    </div>
+    <script src="/assets/js/displayForms.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 </body>
-<script src="/assets/js/displayForms.js"></script>
+
 </html>
+
+
+
+

@@ -18,7 +18,7 @@ class Teacher extends Db {
 
     // Total Pending Teachers
     public function getTotalPendingTeachers() {
-        $sql = "SELECT COUNT(*) FROM Users WHERE role = 'Teacher' AND status = 'Disabled' ";
+        $sql = "SELECT COUNT(*) FROM Users WHERE role = 'Teacher' AND status ='Suspended' AND created_at = updated_at";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchColumn();

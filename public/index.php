@@ -33,12 +33,25 @@ Route::post('/admin/AddUser', [AuthController::class, 'register']);
 Route::get('/admin/dashboard/manageUsers', [AdminController::class, 'manageUsers']);
 Route::get('/admin/changeStatusOfUser/{user_id}', [AdminController::class, 'changeStatusOfUser']);
 Route::get('/admin/displayRoleForm/{user_id}', [AdminController::class, 'displayRoleForm']);
-Route::post('/admin/ChangeUserRole', [AdminController::class, 'changeUserRole']);
+// Route::post('/admin/ChangeUserRole', [AdminController::class, 'changeUserRole']);
 Route::get('/admin/deleteUser/{user_id}', [AdminController::class, 'deleteUser']);
 
 
 Route::get('/admin/dashboard/manageCourses', [AdminController::class, 'manageCourses']);
 Route::get('/admin/deleteCourse/{course_id}', [AdminController::class, 'deleteCourse']);
+
+
+Route::get('/admin/dashboard/manageCategories', [AdminController::class, 'manageCategories']);
+Route::post('/admin/addCategory', [AdminController::class, 'addCategory']);
+Route::get('/admin/deleteCategory/{categoryID}', [AdminController::class, 'deleteCategory']);
+Route::post('/admin/editCategory', [AdminController::class, 'editCategory']);
+
+
+
+
+
+
+
 
 
 // Route::get('/pagination', [AdminController::class, 'pagination']);
