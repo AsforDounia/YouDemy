@@ -74,4 +74,12 @@ class Course extends Db {
         $stmt->execute(['course_id' => $course_id]);
         return true;
     }
+
+
+    public function distributionOfCourses(){
+        $sql = "SELECT c.category_name, COUNT(co.course_id) AS total_courses FROM Categories c LEFT JOIN Courses co ON c.category_id = co.category_id GROUP BY c.category_name;" ;
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

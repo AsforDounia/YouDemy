@@ -40,23 +40,17 @@
             </li>
 
             <li>
-                <a href="/admin/manageTags" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
+                <a href="/admin/dashboard/manageTags" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
                     <i class="bx bx-tag text-lg text-gray-400 w-12"></i>
                     <span class="text-sm font-medium">Tags</span>
                 </a>
             </li>
 
-            <li>
-                <a href="/admin/inactiveTeachers" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
-                    <i class="bx bx-briefcase text-lg text-gray-400 w-12"></i> <!-- Briefcase Icon for Teachers -->
-                    <span class="text-sm font-medium">Inactive Teachers</span>
-                </a>
-            </li>
-            <!-- teacher links -->
+
         <?php elseif ($_SESSION['user']['role'] === "Teacher"): ?>
             <li>
                 <a href="/teacher/addCourse" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
-                    <i class="bx bx-briefcase text-lg text-gray-400 w-12"></i> <!-- Briefcase Icon for Teachers -->
+                    <i class="bx bx-briefcase text-lg text-gray-400 w-12"></i>
                     <span class="text-sm font-medium">Add Course</span>
                 </a>
             </li>

@@ -23,6 +23,7 @@ Route::get('/login', [AuthController::class, 'showLoginForm']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/logout', [AuthController::class, 'logout']);
 
 
 Route::get('/admin/dashboard', [AdminController::class, 'adminDashboard']);
@@ -45,6 +46,13 @@ Route::get('/admin/dashboard/manageCategories', [AdminController::class, 'manage
 Route::post('/admin/addCategory', [AdminController::class, 'addCategory']);
 Route::get('/admin/deleteCategory/{categoryID}', [AdminController::class, 'deleteCategory']);
 Route::post('/admin/editCategory', [AdminController::class, 'editCategory']);
+
+
+
+Route::get('/admin/dashboard/manageTags', [AdminController::class, 'manageTags']);
+Route::post('/admin/addTag', [AdminController::class, 'addTag']);
+Route::get('/admin/deleteTag/{tagID}', [AdminController::class, 'deleteTag']);
+Route::post('/admin/editTag', [AdminController::class, 'editTag']);
 
 
 

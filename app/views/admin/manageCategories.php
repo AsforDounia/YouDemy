@@ -20,17 +20,10 @@
             <?php include('partials/sidebar.php'); ?>
             <!-- Main -->
             <main class="flex-1 bg-gray-100 min-h-screen overflow-y-auto pt-24 px-20">
-                <!-- <button onclick="openModal('add')" class="px-4 py-2 text-sm font-bold text-white bg-[#2E5077] border-2 border-[#2E5077] rounded transition hover:bg-transparent hover:text-[#2E5077] float-right">
-                    Add Category
-                </button> -->
+
                 <a href="/admin/displayForm/addCategory"  class="px-4 py-2 text-sm font-bold text-white bg-[#2E5077] border-2 border-[#2E5077] rounded transition hover:bg-transparent hover:text-[#2E5077] float-right">Add Category</a>
                 <h1 class="text-xl font-bold text-gray-700 my-10">Categories</h1>
-                <?php
-                    if (isset($_SESSION["add_category_error"])) {
-                        echo "<p class='text-red-500'>" . $_SESSION["add_category_error"] . "</p>";
-                        unset($_SESSION["add_category_error"]); // Unset the session variable after displaying
-                    }
-                ?>
+
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-5">
                     <?php foreach ($categories as $category): ?>
@@ -69,19 +62,6 @@
                                         </div>
                                     </div>
                                 <?php endif ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                                 <a onclick="return confirm('Are you sure you want to delete this category?');" href="/admin/deleteCategory/<?=$category['category_id']?>" class="text-red-500 hover:underline">Delete</a>
                             </div>

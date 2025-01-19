@@ -29,7 +29,7 @@ public function dashboardx(){
             $email = $_POST['email'] ?? '';
             $password = $_POST['password'] ?? '';
             if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($password)) {
-                $_SESSION['error'] = 'Email ou mot de passe invalide.';
+                $_SESSION['error'] = 'Invalid email or password.';
                 header('Location: /login');
                 exit;
             }
@@ -37,7 +37,12 @@ public function dashboardx(){
 
         $user = $this->UserModel->findByEmail($email);
         if (!$user || !password_verify($password, $user['password'])) {
-            $_SESSION['error'] = 'Identifiants incorrects.';
+            $_SESSION['error'] = 'Incorrect credentials.';
+            header('Location: /login');
+            exit;
+        }
+        if($user['status'] === 'Suspended'){
+            $_SESSION['error'] = 'Your account has been suspended, please wait for the administrator to activate your account.';
             header('Location: /login');
             exit;
         }
@@ -85,7 +90,7 @@ public function dashboardx(){
             $roleArray = ['Teacher', 'Student'];
         }
         if (empty($fullname) || !filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($role, $roleArray)) {
-            $_SESSION['error'] = 'Veuillez remplir correctement tous les champs.';
+            $_SESSION['error'] = 'Please fill in all fields correctly.';
             header($location);
             exit;
         }
@@ -98,7 +103,7 @@ public function dashboardx(){
 
         
         if ($this->UserModel->findByEmail($email)) {
-            $_SESSION['error'] = 'Cet email est déjà utilisé.';
+            $_SESSION['error'] = 'This email is already in use.';
             header($location);
             exit;
         }
@@ -121,8 +126,6 @@ public function dashboardx(){
             // var_dump($location);die();
         }
 
-        // $_SESSION['success'] = 'Inscription réussie. Veuillez vous connecter.';
-        // header('Location: /login');
         exit;
     }
 
