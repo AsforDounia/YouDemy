@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,12 +52,19 @@
                             <?php endif; ?>
                         </div>
                     </div>
+                    <div class="pb-4">
+                        <p class="text-blue-500 line-clamp-2 px-4"><?php echo $course['tag_name'] ?></p>
+                    </div>
                 </div>
             <?php endforeach; ?>
             </div>
             </main>
         </div>
     </div>
+
+
+
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>

@@ -1,68 +1,120 @@
 <?php
 require_once(__DIR__ . '/../models/Course.php');
-
+require_once (__DIR__ . '/../models/DocumentContent.php');
+require_once (__DIR__ . '/../models/VideoContent.php');
 class TeacherController extends BaseController {
     protected $CourseModel;
     protected $EnrollmentModel;
+    protected $TagModel;
+    protected $CategoryModel;
+
 
     public function __construct() {
         $this->CourseModel = new Course();
         $this->EnrollmentModel = new Enrollment();
+        $this->CategoryModel = new Category() ;
+        $this->TagModel = new Tag();
+    }
+    // displayForm
+    public function displayForm($form) {
+        $this->manageMyCourses($form);
     }
     public function teacherDashboard() {
         $teacher_id = $_SESSION['user']['id'];
-        // var_dump($teacher_id);die();        
+        // var_dump($teacher_id);die();
         $totalEnrollments = $this->EnrollmentModel->getTotalEnrollments($teacher_id);
         $totalCourses = $this->CourseModel->getTotalTeacherCourses($teacher_id);
         $mostPopularCourse = $this->CourseModel->getMostPopularCourse($teacher_id);
+        $distributionOfCourses = $this->CourseModel->distributionOfCoursesByEnrollments($teacher_id);
         $data = [
             'totalEnrollments' => $totalEnrollments,
             'totalCourses' => $totalCourses,
-            'mostPopularCourse' => $mostPopularCourse
+            'mostPopularCourse' => $mostPopularCourse,
+            'distributionOfCourses' => $distributionOfCourses,
         ];
+        // var_dump($data['distributionOfCourses']);die();
         $this->render('teacher/dashboard', $data);
     }
-    
-    public function showCourseCreationForm() {
-        $this->render('teacher/course_creation');
+    public function manageMyCourses($form = null , $error = null) {
+        $teacher_id = $_SESSION['user']['id'];
+        $data = [];
+        if($form != null) {
+            $data += [
+                'form' => 'addCourse',
+            ];
+        }
+        $courses = $this->CourseModel->getAllCourses($teacher_id);
+        $tags = $this->TagModel->getAllTags();
+        $categories = $this->CategoryModel->getAllCategories();
+        // var_dump($categories);die();
+        $data += [
+            'courses' => $courses,
+            'tags' => $tags,
+            'categories' => $categories,
+        ];
+        $this->render('teacher/manageMyCourses', $data);
     }
 
-    public function createCourse() {
-        $title = $_POST['title'] ?? '';
-        $description = $_POST['description'] ?? '';
-        $content = $_POST['content'] ?? '';
-        $tags = $_POST['tags'] ?? '';
-        $category = $_POST['category'] ?? '';
 
-        if (empty($title) || empty($description) || empty($content)) {
-            $_SESSION['error'] = 'Veuillez remplir tous les champs.';
-            header('Location: /teacher/course_creation');
+
+    public function addCourse() {
+        // var_dump($_POST);die();
+        $type = $_POST['type'];
+        $title = $_POST['title'];
+        $description = $_POST['description'];
+        $category = (int)$_POST['category'];
+        $tags = trim($_POST['tags']);
+        $tags_array = [];
+        $tags_array = array_filter(array_map('trim', explode(',', $tags)));
+        $cdn = $_POST['cdn'];
+        $teacherId = $_SESSION['user']['id'];
+
+        if (empty($title) || empty($description) || empty($cdn)) {
+            $_SESSION['error'] = 'Please fill in all fields correctly.';
+            header('Location: /teacher/displayForm/addCourse');
             exit;
         }
-
-        $this->CourseModel->createCourse([
-            'title' => $title,
-            'description' => $description,
-            'content' => $content,
-            'tags' => $tags,
-            'category' => $category,
-            'teacher_id' => $_SESSION['user']['id'],
-        ]);
-
-        $_SESSION['success'] = 'Cours créé avec succès.';
-        header('Location: /teacher/courses');
-        exit;
+        
+        try {
+            if ($type === 'Video') {
+        // var_dump($_POST);die();
+                
+                $content = new VideoContent();
+                $duration = $_POST['duration'] ?? 0; // Assurez-vous d'avoir un champ duration dans votre formulaire
+                $specificData = $duration;
+            } else {
+                $content = new DocumentContent();
+                $specificData = strtoupper(pathinfo($cdn, PATHINFO_EXTENSION));
+            }
+            
+            // Appel de la méthode save
+            $courseId = $this->CourseModel->saveCourse(
+                $title,
+                $description,
+                $category,
+                $teacherId,
+                $content,
+                $cdn,
+                $specificData
+            );
+        
+            // Si vous voulez aussi sauvegarder les tags
+            if(!empty($tags && !empty($tags_array))){
+                foreach ($tags_array as $tag) {
+                    $tagId = (int)$tag ;
+                    $this->TagModel->addCourseTags($tagId, $courseId);
+                }
+                
+            }
+        
+            $this->manageMyCourses();
+            
+        } catch (Exception $e) {
+            echo "Erreur: " . $e->getMessage();
+        }
     }
 
-    public function manageCourses() {
-        $courses = $this->CourseModel->getCoursesByTeacher($_SESSION['user']['id']);
-        $this->render('teacher/course_management', ['courses' => $courses]);
-    }
 
-    public function showStatistics() {
-        $statistics = $this->CourseModel->getStatisticsByTeacher($_SESSION['user']['id']);
-        $this->render('teacher/statistics', ['statistics' => $statistics]);
-    }
 
 
 }

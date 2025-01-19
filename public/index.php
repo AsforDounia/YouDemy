@@ -68,7 +68,9 @@ Route::post('/admin/editTag', [AdminController::class, 'editTag']);
 
 
 Route::get('/teacher/dashboard', [TeacherController::class, 'teacherDashboard']);
-
+Route::get('/teacher/displayForm/{form}', [TeacherController::class, 'displayForm']);
+Route::get('/teacher/dashboard/manageMyCourses', [TeacherController::class, 'manageMyCourses']);
+Route::post('/teacher/addCourse', [TeacherController::class, 'addCourse']);
 
 
 

@@ -83,7 +83,21 @@
                             <h2 class="text-xl font-bold mb-4">Distribution Of Courses By Enrollments</h2>
                             <!-- Add your activities content here -->
                             <div class="space-y-4">
-
+                            <?php
+                                if($data['distributionOfCourses']) :
+                                    foreach($data['distributionOfCourses'] as $distributionOfCourse) : ?>
+                                        <div class="p-4 bg-gray-100 rounded-lg flex justify-between">
+                                            <span>
+                                                <?= $distributionOfCourse['title'] ?>
+                                            </span>
+                                            <span>
+                                                <?= $distributionOfCourse['total_students'] ?>
+                                            </span>
+                                        </div>
+                                    <?php
+                                    endforeach ;
+                                endif ;
+                            ?>
                             </div>
                         </div>
 

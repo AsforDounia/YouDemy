@@ -55,4 +55,14 @@ class Tag extends Db {
         }
     }
 
+    public function addCourseTags($tagId, $courseId){
+        $stmt ="INSERT INTO CourseTags (tag_id, course_id) VALUES (:tag_id, :course_id)";
+        $stmt = $this->conn->prepare($stmt);
+        $stmt->execute([
+            ':tag_id' => $tagId,
+            ':course_id' => $courseId
+        ]);
+        
+    }
+
 }

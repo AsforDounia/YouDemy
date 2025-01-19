@@ -6,13 +6,35 @@ class Course extends Db {
         parent::__construct();
     }
 
-    public function getAllCourses() {
-        $query = "SELECT * FROM Courses INNER JOIN Categories ON Courses.category_id = Categories.category_id INNER JOIN Users ON Courses.teacher_id = Users.user_id;";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
+    // public function getAllCourses($teacherId = null) {
+    //     if($teacherId != null){
+    //         $query = "SELECT courses.course_id, courses.title, courses.description, courses.content_url, courses.course_type, categories.category_name, users.full_name , profile_picture, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ' , ') AS tag_name FROM courses INNER JOIN categories ON courses.category_id = categories.category_id INNER JOIN users ON courses.teacher_id = users.user_id LEFT JOIN coursetags ON courses.course_id = coursetags.course_id LEFT JOIN tags ON coursetags.tag_id = tags.tag_id WHERE teacher_id = :teacher_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+    //         $stmt = $this->conn->prepare($query);
+    //         $stmt->execute(['teacher_id' => $teacherId]);
+    //     }else{
+    //         $query = "SELECT courses.course_id, courses.title, courses.description, courses.content_url, courses.course_type, categories.category_name, users.full_name , profile_picture, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ' , ') AS tag_name FROM courses INNER JOIN categories ON courses.category_id = categories.category_id INNER JOIN users ON courses.teacher_id = users.user_id LEFT JOIN coursetags ON courses.course_id = coursetags.course_id LEFT JOIN tags ON coursetags.tag_id = tags.tag_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+    //         $stmt = $this->conn->prepare($query);
+    //         $stmt->execute();
+    //     }
+    //     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     return $result;
+    // }
+
+
+    public function getAllCourses($teacherId = null) {
+        if ($teacherId != null) {
+            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE courses.teacher_id = :teacher_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute(['teacher_id' => $teacherId]);
+        } else {
+            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+        }
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+    
 
     public function getTotalCourses() {
         $query = "SELECT COUNT(*) FROM courses";
@@ -43,7 +65,7 @@ class Course extends Db {
 
 
     public function createCourse($data) {
-        $sql = "INSERT INTO courses (title, description, content, tags, category, teacher_id) VALUES (:title, :description, :content, :tags, :category, :teacher_id)";
+        $sql = "INSERT INTO courses (title, description, content, category, teacher_id) VALUES (:title, :description, :content, :tags, :category, :teacher_id)";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([
             'title' => $data['title'],
@@ -55,12 +77,12 @@ class Course extends Db {
         ]);
     }
 
-    public function getCoursesByTeacher($teacherId) {
-        $sql = "SELECT * FROM courses WHERE teacher_id = :teacher_id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute(['teacher_id' => $teacherId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    // public function getCoursesByTeacher($teacherId) {
+    //     $sql = "SELECT * FROM Courses INNER JOIN Categories ON Courses.category_id = Categories.category_id WHERE teacher_id = :teacher_id";
+    //     $stmt = $this->conn->prepare($sql);
+    //     $stmt->execute(['teacher_id' => $teacherId]);
+    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // }
 
     public function getStatisticsByTeacher($teacherId) {
         $sql = "SELECT COUNT(*) as total_courses, SUM(enrollments) as total_enrollments FROM courses WHERE teacher_id = :teacher_id";
@@ -93,6 +115,7 @@ class Course extends Db {
     }
 
 
+
     // get Total Teacher Courses
     public function getTotalTeacherCourses($teacherId) {
         $sql = "SELECT COUNT(*) FROM courses WHERE teacher_id = :teacher_id ";
@@ -100,5 +123,45 @@ class Course extends Db {
         $stmt->execute(['teacher_id' => $teacherId]);
         $result = $stmt->fetchColumn();
         return $result;
+    }
+    //  Distribution Of Courses By Enrollments
+    public function distributionOfCoursesByEnrollments($teacherId){
+        $sql = "SELECT Courses.course_id, Courses.title, COUNT(Enrollments.student_id) AS total_students FROM Enrollments JOIN Courses ON Enrollments.course_id = Courses.course_id WHERE Courses.teacher_id = :teacher_id GROUP BY Courses.course_id ORDER BY total_students DESC;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['teacher_id' => $teacherId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
+
+
+
+
+
+    public function saveCourse($title, $description, $categoryId, $teacherId, Content $content, $contentUrl, $specificData) {
+        try {
+            // $this->conn->beginTransaction();
+            
+            // Insert course
+            $stmt = $this->conn->prepare("INSERT INTO Courses (title, description, category_id, teacher_id) VALUES (:title, :description, :category_id, :teacher_id)");
+            $stmt->execute([
+                ':title' => $title,
+                ':description' => $description,
+                ':category_id' => $categoryId,
+                ':teacher_id' => $teacherId
+            ]);
+            
+            $courseId = (int)$this->conn->lastInsertId();
+            // Save the content
+            $content->save($courseId, $contentUrl, $specificData);
+            
+    
+            
+            // $this->conn->commit();
+            return $courseId;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw new Exception("Error saving course: " . $e->getMessage());
+        }
     }
 }
