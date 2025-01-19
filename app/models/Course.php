@@ -23,9 +23,18 @@ class Course extends Db {
     }
 
     // Le cour avec le plus d' étudiants
-    public function getMostPopularCourse() {
-        $query = "SELECT * FROM courses ORDER BY nb_etudiants DESC LIMIT 1";
-        $stmt = $this->conn->prepare($query);
+    public function getMostPopularCourse($teacherId = null) {
+        // var_dump($teacherId);die();
+        if($teacherId != null) {
+            $query = "SELECT Courses.course_id, Courses.title, COUNT(Enrollments.student_id) AS total_students FROM Enrollments JOIN Courses ON Enrollments.course_id = Courses.course_id WHERE Courses.teacher_id = :teacher_id  GROUP BY Courses.course_id ORDER BY total_students DESC LIMIT 1;";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':teacher_id', $teacherId);
+        }
+        else {
+            $query = "SELECT Courses.course_id, Courses.title, COUNT(Enrollments.student_id) AS total_students FROM Enrollments JOIN Courses ON Enrollments.course_id = Courses.course_id GROUP BY Courses.course_id ORDER BY total_students DESC LIMIT 1;";
+            $stmt = $this->conn->prepare($query);
+        }
+
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result;
@@ -77,9 +86,19 @@ class Course extends Db {
 
 
     public function distributionOfCourses(){
-        $sql = "SELECT c.category_name, COUNT(co.course_id) AS total_courses FROM Categories c LEFT JOIN Courses co ON c.category_id = co.category_id GROUP BY c.category_name;" ;
+        $sql = "SELECT Categories.category_name, COUNT(Courses.course_id) AS total_courses FROM Categories LEFT JOIN Courses ON Categories.category_id = Courses.category_id GROUP BY Categories.category_name;" ;
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    // get Total Teacher Courses
+    public function getTotalTeacherCourses($teacherId) {
+        $sql = "SELECT COUNT(*) FROM courses WHERE teacher_id = :teacher_id ";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['teacher_id' => $teacherId]);
+        $result = $stmt->fetchColumn();
+        return $result;
     }
 }

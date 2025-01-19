@@ -41,7 +41,7 @@
                         <div onclick="window.location.href='/admin/dashboard/manageCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-graduation-cap fa-2x fa-inverse text-black"></i>
+                                    <i class="fas fa-book-open fa-2x text-black"></i>
                                 </div>
                                 <span class="text-2xl font-bold ml-auto"><?=$data['totalCourses']?></span>
                             </div>
@@ -52,7 +52,7 @@
                         <div onclick="window.location.href='/admin/dashboard/manageCategories'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-box fa-2x fa-inverse text-black"></i>
+                                    <i class="fas fa-th-large fa-2x text-black"></i>
                                 </div>
                                 <span class="text-2xl font-bold ml-auto"><?=$data['CategoriesCount']?></span>
                             </div>
@@ -104,7 +104,7 @@
                         <div onclick="window.location.href='/admin/dashboard/manageCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-lightbulb fa-2x fa-inverse text-black"></i>
+                                    <i class="fas fa-award fa-2x text-black"></i>
                                 </div>
                                 <span class="ml-auto">
                                     <?php

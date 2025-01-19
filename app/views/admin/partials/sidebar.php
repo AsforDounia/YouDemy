@@ -49,8 +49,20 @@
 
         <?php elseif ($_SESSION['user']['role'] === "Teacher"): ?>
             <li>
+                <a href="/teacher/dashboard" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
+                    <i class="bx bx-home text-lg text-gray-400 w-12"></i>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/teacher/dashboard/manageCourses" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
+                    <i class="bx bx-book text-lg text-gray-400 w-12"></i>
+                    <span class="text-sm font-medium">My Courses</span>
+                </a>
+            </li>
+            <li>
                 <a href="/teacher/addCourse" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
-                    <i class="bx bx-briefcase text-lg text-gray-400 w-12"></i>
+                <i class="bx bx-plus text-lg text-gray-400 w-12"></i>
                     <span class="text-sm font-medium">Add Course</span>
                 </a>
             </li>

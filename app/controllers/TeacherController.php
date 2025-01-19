@@ -3,12 +3,24 @@ require_once(__DIR__ . '/../models/Course.php');
 
 class TeacherController extends BaseController {
     protected $CourseModel;
+    protected $EnrollmentModel;
 
     public function __construct() {
         $this->CourseModel = new Course();
+        $this->EnrollmentModel = new Enrollment();
     }
     public function teacherDashboard() {
-        $this->render('teacher/dashboard');
+        $teacher_id = $_SESSION['user']['id'];
+        // var_dump($teacher_id);die();        
+        $totalEnrollments = $this->EnrollmentModel->getTotalEnrollments($teacher_id);
+        $totalCourses = $this->CourseModel->getTotalTeacherCourses($teacher_id);
+        $mostPopularCourse = $this->CourseModel->getMostPopularCourse($teacher_id);
+        $data = [
+            'totalEnrollments' => $totalEnrollments,
+            'totalCourses' => $totalCourses,
+            'mostPopularCourse' => $mostPopularCourse
+        ];
+        $this->render('teacher/dashboard', $data);
     }
     
     public function showCourseCreationForm() {

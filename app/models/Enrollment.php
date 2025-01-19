@@ -22,6 +22,20 @@ class Enrollment extends Db {
             }
     }
 
+    // get Total Enrollments
+    public function getTotalEnrollments($teacher_id) {
+        try{
+            $sql = "SELECT COUNT(Enrollments.student_id) FROM Enrollments JOIN Courses ON Enrollments.course_id = Courses.course_id WHERE Courses.teacher_id = :teacher_id ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':teacher_id', $teacher_id);
+            $stmt->execute();
+            $result = $stmt->fetchColumn();
+            return $result;
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
+
 
 
 
