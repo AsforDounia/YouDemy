@@ -36,7 +36,41 @@ class Enrollment extends Db {
         }
     }
 
+    // public function getStudentCourses($studentID){
+    //     try{
+    //         $query = "SELECT * FROM enrollments WHERE student_id = :studentID";
+    //         $stmt = $this->conn->prepare($query);
+    //         $stmt->bindParam(':studentID', $studentID);
+    //         $stmt->execute();
+    //         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //         return $result;
+    //     } catch (PDOException $e) {
+    //         echo 'ERROR: ' . $e->getMessage();
+    //     }
+    // }
 
 
+    public function getStudentCourses($studentID) {
+            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses JOIN Enrollments on courses.course_id = Enrollments.course_id  INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE Enrollments.student_id = :student_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute(['student_id' => $studentID]);
+        
+            $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
+
+    public function enrollInCourse($student_id, $courseID){
+        try{
+            $query = "INSERT INTO Enrollments (student_id, course_id) VALUES (:student_id, :courseID)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':student_id', $student_id);
+            $stmt->bindParam(':courseID', $courseID);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage();
+        }
+    }
 
 }

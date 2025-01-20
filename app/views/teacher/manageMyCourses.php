@@ -26,14 +26,8 @@
             <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($data['courses'] as $course): ?>
                 <div class="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <!-- <img src="https://dummyimage.com/120" alt="Course thumbnail" class="w-full h-48 object-cover"> -->
-                    <?php if ($course['content_type'] === "Video") : ?>
-                        <iframe class="w-full overflow-y-hidden" src="https://www.youtube.com/embed/t0syDUSbdfE" allowfullscreen></iframe>
-
-                        <!-- <video class="w-full overflow-y-hidden" src="https://youtu.be/t0syDUSbdfE?si=_fBPB-vRA5pkFjjH"></video> -->
-                    <?php else: ?>
-                        <iframe class="w-full overflow-y-hidden" src="https://www.univ-orleans.fr/iut-orleans/informatique/intra/tuto/php/FastPHP.pdf"></iframe>
-                    <?php endif; ?>
+                <iframe class="w-full overflow-y-hidden" src="<?= $course['content_url'] ?>" frameborder="0" allowfullscreen></iframe>
+                    
                     <div class="h-28">
                         <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
                             <h3 class="text-xl font-bold"><?php echo $course['title'] ?></h3>

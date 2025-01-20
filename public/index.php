@@ -78,6 +78,9 @@ Route::get('/teacher/dashboard/manegeEnrollmentsByCourse', [TeacherController::c
 
 
 Route::get('/student/dashboard', [StudentController::class, 'studentDashboard']);
+Route::post('/student/displayCourse', [StudentController::class, 'displayCourse']);
+Route::get('/student/dashboard/myCourses', [StudentController::class, 'myCourses']);
+Route::get('/student/student/enrollInCourse/{courseId}', [StudentController::class, 'enrollInCourse']);
 
 
 

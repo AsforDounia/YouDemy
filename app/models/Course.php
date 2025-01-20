@@ -34,7 +34,15 @@ class Course extends Db {
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
-    
+
+    // get url course by id
+    public function getCourseUrlById($courseId) {
+        $query = "SELECT content_url FROM contents WHERE content_id = :course_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(['course_id' => $courseId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['content_url'];
+    }
 
     public function getTotalCourses() {
         $query = "SELECT COUNT(*) FROM courses";

@@ -62,7 +62,7 @@
             </li>
             <li>
                 <a href="/teacher/dashboard/manegeEnrollmentsByCourse" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
-                <i class="bx bx-plus text-lg text-gray-400 w-12"></i>
+                <i class="bx bx-group text-lg text-gray-400 w-12"></i>
                     <span class="text-sm font-medium">Enrollments By Courses</span>
                 </a>
             </li>
@@ -72,6 +72,22 @@
                     <span class="text-sm font-medium">Add Course</span>
                 </a>
             </li>
+
+
+        <?php elseif ($_SESSION['user']['role'] === "Student"): ?>
+            <li>
+                <a href="/student/dashboard" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
+                    <i class="bx bx-home text-lg text-gray-400 w-12"></i>
+                    <span class="text-sm font-medium">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/student/dashboard/myCourses" class="flex items-center h-12 text-gray-500 hover:text-gray-800">
+                    <i class="bx bx-book text-lg text-gray-400 w-12"></i>
+                    <span class="text-sm font-medium">My Courses</span>
+                </a>
+            </li>
+            
         <?php endif ?>
 
     </ul>

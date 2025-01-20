@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,50 +10,52 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title>Youdemy Platform</title>
 </head>
 
+
 <body>
     <div class="flex">
-        <?php include('partials/header.php'); ?>
+    <?php include(__DIR__.'/../admin/partials/header.php'); ?>
         <!-- Main Content -->
         <div class="flex flex-col flex-1 lg:ml-64">
-            <?php include('partials/sidebar.php'); ?>
+        <?php include(__DIR__.'/../admin/partials/sidebar.php'); ?>
             <!-- Main -->
             <main class="flex-1 bg-gray-100 min-h-screen overflow-y-auto pt-24 px-20">
             <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($data['courses'] as $course): ?>
                 <div class="relative bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                    <a href="/admin/deleteCourse/<?= $course['course_id'] ?>" onclick="return confirm('Are you sure you want to delete this course?');" class="absolute right-0 p-2 text-red-500 hover:underline">Delete</a>
-                    <iframe class="w-full overflow-y-hidden" src="<?= $course['content_url'] ?>" frameborder="0" allowfullscreen></iframe>
-                    
-                    <div class="">
-                        <div class="flex items-center space-x-2 justify-between w-full p-4 ">
+
+                    <img src="https://dummyimage.com/120" alt="Course thumbnail" class="w-full h-48 object-cover">
+
+    
+                    <div class="h-28">
+                        <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
                             <h3 class="text-xl font-bold"><?php echo $course['title'] ?></h3>
                             <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full"><?= $course['category_name']; ?></span>
                         </div>
-                        <p class="text-gray-600 line-clamp-2 px-4"><?php echo $course['description'] ?></p>
+                        <p class="text-gray-600 line-clamp-2 p-4"><?php echo $course['description'] ?></p>
                     </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
-                            <span class="text-sm text-gray-600"><?= $course['full_name']; ?></span>
-                            <?php if (!$course['profile_picture']): ?>
-                                <div class="w-14 h-14 flex items-center justify-center bg-gray-200 text-gray-500 text-xs rounded-full">
-                                    No Pic
-                                </div>
-                            <?php endif; ?>
+                    <div class="pb-4 flex justify-between items-center px-4">
+                        <p class="text-blue-500 line-clamp-2 px-4"><?php echo $course['tag_name'] ?></p>
+                        <div>
+                            <form action="/student/displayCourse" method="post">
+                                <input type="hidden" value="<?= $course['course_id'] ?>" name="course_id">
+                                <button class="text-blue-500" type="submit"><i class="fa fa-eye text-xl"></i></button>
+                            </form>
+                                
+                 
                         </div>
                     </div>
-                    <div class="pb-4">
-                        <p class="text-blue-500 line-clamp-2 px-4"><?php echo $course['tag_name'] ?></p>
-                    </div>
                 </div>
+ 
             <?php endforeach; ?>
             </div>
             </main>
         </div>
+
     </div>
 
 
@@ -62,6 +63,7 @@
 
 
 
+ 
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
     <script src="/assets/js/displayForms.js"></script>
 
