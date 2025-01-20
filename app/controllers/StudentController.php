@@ -41,21 +41,8 @@ class StudentController extends BaseController {
     }
 
     public function displayCourse() {
-        // $studentID = $_SESSION['user']['id'];
         $courseID = $_POST['course_id'];
-        // $studentCourses = $this->EnrollmentModel->getStudentCourses($studentID);
-        // foreach($studentCourses as $course) {
-        //     if($course['course_id'] == $courseID) {
-        //         $courseIdDisplay = $course['course_id'];
-        //     }
-        // }
-        // if(isset($courseIdDisplay)){
-            // $this->studentDashboard($courseIdDisplay);
-        // }
-        // else{
-            $this->studentDashboard($courseID);
-        // }
-        
+        $this->studentDashboard($courseID);
 
     }
 
@@ -78,6 +65,6 @@ class StudentController extends BaseController {
         $this->render('student/myCourses',['data' => $data]);
     }
 
-    
+
 
 }
