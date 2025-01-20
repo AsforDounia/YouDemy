@@ -164,4 +164,38 @@ class Course extends Db {
             throw new Exception("Error saving course: " . $e->getMessage());
         }
     }
+
+    public function modifyCourse($params) {
+        try {
+            // $params = [
+            //     'title' => $title,
+            //     'description' => $description,
+            //     'category' => $category,
+            //     'content_type' => $contentType,
+            //     'content_url' => $contentUrl,
+            //     'course_id' => $courseId,
+            //     'content' => $content,
+            //     'specificData' => $specificData
+
+            // ];
+         
+
+            $sql = "UPDATE courses SET title = :title, description = :description, category_id = :category WHERE course_id = :course_id";
+            $stmt = $this->conn->prepare($sql);
+
+            $stmt->execute([
+                'title' => $params['title'],
+                'description' => $params['description'],
+                'category' => $params['category'],
+                'course_id' => $params['course_id']
+            ]);
+            $params['content']->updateContent($params['course_id'], $params['content_url'] , $params['specificData']);
+            
+        } catch (Exception $e) {
+            throw new Exception("Error modifying course: " . $e->getMessage());
+        }
+    }
+
+
+
 }

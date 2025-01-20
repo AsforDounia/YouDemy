@@ -101,73 +101,103 @@ INSERT INTO `users` (`full_name`, `email`, `password`, `role`, `created_at`, `up
 ('Teacher3', 'teacher3@gmail.com', '$2y$10$t08pnC/MXhaUxgKrSyd.NOq.9/NSLfLetJdyU3//1bgwJe7cuSV1e', 'Teacher', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
 ('Student6', 'student6@gmail.com', '$2y$10$t08pnC/MXhaUxgKrSyd.NOq.9/NSLfLetJdyU3//1bgwJe7cuSV1e', 'Student', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
--- Insertion de 10 catégories
-INSERT INTO `Categories` (`category_name`) VALUES
-('Development'),
-('Business'),
-('IT & Software'),
+INSERT INTO Categories (category_name) VALUES
+('Web Development'),
+('Data Science'),
 ('Design'),
 ('Marketing'),
 ('Photography'),
-('Music'),
+('Business'),
 ('Personal Development'),
-('Health & Fitness'),
-('Finance & Accounting');
+('Programming Languages'),
+('Cybersecurity'),
+('AI & Machine Learning');
 
 -- Insertion des cours
-INSERT INTO `Courses` (`title`, `description`, `category_id`, `teacher_id`) VALUES
-('HTML Basics', 'Learn the basics of HTML.', 1, 5),
-('CSS Advanced', 'Advanced concepts in CSS.', 1, 5),
-('JavaScript Essentials', 'Core concepts of JavaScript.', 1, 6),
-('Business Strategy', 'Master business strategies.', 2, 6),
-('UI/UX Design', 'User interface and experience design.', 4, 9),
-('Digital Marketing', 'Marketing in the digital age.', 5, 9),
-('Python Programming', 'Learn Python programming.', 1, 5),
-('Photography Basics', 'Introduction to photography.', 6, 9),
-('Music Production', 'Produce your own music.', 7, 9),
-('Personal Finance', 'Manage your finances effectively.', 10, 6);
+INSERT INTO Courses (title, description, category_id, teacher_id) VALUES
+('Learn PHP', 'Comprehensive course on PHP programming.', 1, 9),
+('Master Python', 'Advanced Python programming techniques.', 2, 5),
+('Graphic Design Basics', 'Introduction to design concepts.', 3, 6),
+('SEO Fundamentals', 'Learn the basics of SEO.', 4, 9),
+('Photography 101', 'A beginner-friendly photography course.', 5, 5),
+('Business Strategy', 'Key strategies for business success.', 6, 6),
+('Stress Management', 'Techniques for personal development.', 7, 9),
+('JavaScript for Beginners', 'An introduction to JavaScript.', 1, 5),
+('Introduction to Cybersecurity', 'Fundamentals of cybersecurity.', 9, 6),
+('AI Concepts', 'Basic concepts of AI and machine learning.', 10, 9),
+('ReactJS Essentials', 'Learn to build dynamic web applications using ReactJS.', 1, 6),
+('Data Visualization with Python', 'Techniques for visualizing data effectively.', 2, 5),
+('Advanced CSS Techniques', 'Take your CSS skills to the next level.', 3, 9),
+('Email Marketing Basics', 'Strategies for successful email campaigns.', 4, 5),
+('Portrait Photography', 'Master the art of portrait photography.', 5, 6),
+('Entrepreneurship Fundamentals', 'Essential skills for starting a business.', 6, 9),
+('Mindfulness Meditation', 'Develop mindfulness through meditation.', 7, 5),
+('Ruby on Rails Basics', 'Learn web development with Ruby on Rails.', 8, 6),
+('Network Security', 'Protect networks from cyber threats.', 9, 9),
+('Deep Learning Foundations', 'Introduction to deep learning concepts.', 10, 5);
 
 -- Insertion des contenus
-INSERT INTO `Contents` (`content_id`, `content_type` , `content_url`) VALUES
-(1, 'Video','https://example.com/html.mp4'),
-(2, 'Document' , 'https://example.com/music.docx'),
-(3, 'Video' , 'https://example.com/css.mp4'),
-(4, 'Document' , 'https://example.com/music.docx'),
-(5, 'Video' , 'https://example.com/css.mp4'),
-(6, 'Document' , 'https://example.com/music.docx'),
-(7, 'Video' , 'https://example.com/css.mp4'),
-(8, 'Video' , 'https://example.com/css.mp4'),
-(9, 'Document' , 'https://example.com/music.docx'),
-(10, 'Video' , 'https://example.com/css.mp4');
+INSERT INTO Contents (content_id, content_type, content_url) VALUES
+(1, 'Video', 'https://www.youtube.com/embed/t0syDUSbdfE'),  -- Learn PHP
+(2, 'Document', 'https://www.univ-orleans.fr/iut-orleans/informatique/intra/tuto/php/FastPHP.pdf'),  -- PHP Document
+(3, 'Video', 'https://www.youtube.com/embed/mH2-ILnwKYM'),  -- Master Python
+(4, 'Document', 'https://docs.python.org/3/tutorial/index.html'),  -- Python Documentation
+(5, 'Video', 'https://www.youtube.com/embed/4EkGqO2jv4w'),  -- Graphic Design Basics
+(6, 'Document', 'https://www.canva.com/learn/graphic-design/'),  -- Graphic Design Document
+(7, 'Video', 'https://www.youtube.com/embed/M8B7U2DVqpM'),  -- SEO Fundamentals
+(8, 'Document', 'https://moz.com/learn/seo'),  -- SEO Document
+(9, 'Video', 'https://www.youtube.com/embed/XAo6z9VGmWQ'),  -- Photography 101
+(10, 'Document', 'https://www.nationalgeographic.com/photography/photo-tips/'),  -- Photography Document
+(11, 'Video', 'https://www.youtube.com/embed/EW77kS2mrOY'),  -- ReactJS Essentials
+(12, 'Document', 'https://reactjs.org/docs/getting-started.html'),  -- ReactJS Document
+(13, 'Video', 'https://www.youtube.com/embed/CpqPLMeUNuU'),  -- Data Visualization with Python
+(14, 'Document', 'https://pandas.pydata.org/pandas-docs/stable/user_guide/visualization.html'),  -- Data Visualization Document
+(15, 'Video', 'https://www.youtube.com/embed/fNroHZhG5Mw'),  -- Advanced CSS Techniques
+(16, 'Document', 'https://www.w3.org/Style/CSS/'),  -- CSS Document
+(17, 'Video', 'https://www.youtube.com/embed/5zDaXBU4XtA'),  -- Ruby on Rails Basics
+(18, 'Document', 'https://guides.rubyonrails.org/'),  -- Ruby on Rails Document
+(19, 'Video', 'https://www.youtube.com/embed/XMUNZbNwaVE'),  -- Deep Learning Foundations
+(20, 'Document', 'https://www.deeplearningbook.org/');  -- Deep Learning Document
+
 
 -- Insertion des contenus vidéo
-INSERT INTO `ContentVideos` (`content_id`, `video_duration`) VALUES
-(1,  600),
-(3, 720),
-(5,  540),
-(7, 900),
-(8,  840),
-(10,  750);
+INSERT INTO ContentVideos (content_id, video_duration) VALUES
+(1, 300),
+(3, 450),
+(5, 600),
+(7, 720),
+(9, 540),
+(11, 400),
+(13, 350),
+(15, 480),
+(17, 390),
+(19, 610);
 
--- Insertion des contenus document
-INSERT INTO `ContentDocuments` (`content_id`, `document_format`) VALUES
+-- Insérer des données dans la table ContentDocuments
+INSERT INTO ContentDocuments (content_id, document_format) VALUES
 (2, 'PDF'),
-(4,  'DOCX'),
+(4, 'PDF'),
 (6, 'PDF'),
-(9, 'DOCX');
+(8, 'PDF'),
+(10, 'PDF'),
+(12, 'PDF'),
+(14, 'PDF'),
+(16, 'PDF'),
+(18, 'PDF'),
+(20, 'PDF');
 
--- Insertion des inscriptions
-INSERT INTO `Enrollments` (`student_id`, `course_id`, `grade`, `status`) VALUES
+-- Insérer des données dans la table Enrollments
+INSERT INTO Enrollments (student_id, course_id, grade, status) VALUES
 (2, 1, 'A', 'Completed'),
-(3, 2, 'B', 'In Progress'),
-(4, 3, 'A', 'Completed'),
-(7, 4, 'C', 'In Progress'),
-(8, 5, 'B', 'Completed'),
+(4, 2, 'B', 'Completed'),
+(6, 3, 'C', 'Ongoing'),
+(8, 4, 'A', 'Ongoing'),
+(10, 5, 'B', 'Completed'),
 (2, 6, 'A', 'Completed'),
-(3, 7, 'B', 'In Progress'),
-(4, 8, 'A', 'Completed'),
-(7, 9, 'B', 'Completed'),
-(8, 10, 'A', 'In Progress');
+(4, 7, 'B', 'Ongoing'),
+(6, 8, 'C', 'Completed'),
+(8, 9, 'A', 'Ongoing'),
+(10, 10, 'B', 'Completed');
 
 -- Insertion des tags
 INSERT INTO `Tags` (`tag_name`) VALUES

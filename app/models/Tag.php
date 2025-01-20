@@ -62,7 +62,13 @@ class Tag extends Db {
             ':tag_id' => $tagId,
             ':course_id' => $courseId
         ]);
-        
+
     }
+    public function deleteCourseTags($courseId){
+        $stmt = "DELETE FROM CourseTags WHERE course_id = :course_id";
+        $stmt = $this->conn->prepare($stmt);
+        $stmt->execute([':course_id' => $courseId]);
+    }
+
 
 }

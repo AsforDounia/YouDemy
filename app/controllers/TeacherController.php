@@ -40,7 +40,7 @@ class TeacherController extends BaseController {
         $data = [];
         if($form != null) {
             $data += [
-                'form' => 'addCourse',
+                'form' => $form,
             ];
         }
         $courses = $this->CourseModel->getAllCourses($teacher_id);
@@ -99,12 +99,11 @@ class TeacherController extends BaseController {
             );
         
             // Si vous voulez aussi sauvegarder les tags
-            if(!empty($tags && !empty($tags_array))){
+            if(!empty($tags) && !empty($tags_array)){
                 foreach ($tags_array as $tag) {
                     $tagId = (int)$tag ;
                     $this->TagModel->addCourseTags($tagId, $courseId);
                 }
-                
             }
         
             $this->manageMyCourses();
@@ -114,7 +113,87 @@ class TeacherController extends BaseController {
         }
     }
 
+    public function deleteCourse($course_id){
+        $this->CourseModel->deleteCourse($course_id);
+        header('Location: /teacher/dashboard/manageMyCourses');
+    }
 
+    public function modifyCourse() {
+        try {
+            // Validate and sanitize input data
+            $courseId = (int)$_POST['course_id'];
+            $title = $_POST[ 'title'];
+            $description = $_POST[ 'description'];
+            $category = (int)$_POST[ 'category'];
+            $contentType = $_POST[ 'type'];
+            $contentUrl = $_POST[ 'cdn'];
+            $tags = trim($_POST[ 'tags']);
+
+            // Input validation
+            if (empty($title) || empty($description) || empty($category) || empty($contentType) || empty($contentUrl)) {
+                throw new Exception("All fields are required");
+            }
+
+            // Start transaction
+            // $this->conn->beginTransaction();
+
+            // Update course basic information
+            
+            $params = [
+                'title' => $title,
+                'description' => $description,
+                'category' => $category,
+                'content_type' => $contentType,
+                'content_url' => $contentUrl,
+                'course_id' => $courseId
+            ];
+            if($contentType == 'Video'){
+                $content = new VideoContent();
+                $duration = $_POST['duration'] ?? 0; // Assurez-vous d'avoir un champ duration dans votre formulaire
+                $specificData = $duration;
+                $params += [
+                    'content' => $content,
+                    'specificData' => $specificData
+                ];
+            } else {
+                $content = new DocumentContent();
+                $specificData = strtoupper(pathinfo($contentUrl, PATHINFO_EXTENSION));
+                $params += [
+                    'content' => $content,
+                    'specificData' => $specificData
+                ];
+            }
+            
+            $this->CourseModel->modifyCourse($params);
+
+            // Handle tags
+            if (!empty($tags)) {
+                $this->TagModel->deleteCourseTags($courseId);
+                $tags_array = [];
+                $tags_array = array_filter(array_map('trim', explode(',', $tags)));
+
+                if(!empty($tags_array)){
+                    foreach ($tags_array as $tag) {
+                        $tagId = (int)$tag ;
+                        $this->TagModel->addCourseTags($tagId, $courseId);
+                    }
+                }
+            }
+            // // Commit transaction
+            $this->manageMyCourses();
+
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            // if ($this->conn->inTransaction()) {
+            //     $this->conn->rollBack();
+            // }
+
+            return [
+                'success' => false,
+                'message' => 'Error updating course: ' . $e->getMessage()
+            ];
+        }
+    }
 
 
 }

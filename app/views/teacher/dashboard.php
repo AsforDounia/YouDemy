@@ -35,7 +35,7 @@
                         </div>
                         
                         <!-- Courses Card -->
-                        <div onclick="window.location.href='/dashboard/manageCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
+                        <div onclick="window.location.href='/teacher/dashboard/manageMyCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-book-open fa-2x text-black"></i>
@@ -48,7 +48,7 @@
 
               
                         <!-- Most Popular course -->
-                        <div onclick="window.location.href='/dashboard/manageCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
+                        <div onclick="window.location.href='/teacher/dashboard/manageMyCourses'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-award fa-2x text-black"></i>
@@ -65,7 +65,7 @@
                         </div>
 
                         <!-- Add Course Card -->
-                        <div onclick="window.location.href='/dashboard/addCourse'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
+                        <div onclick="window.location.href='/teacher/displayForm/addCourse'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-plus fa-2x text-black"></i>

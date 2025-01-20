@@ -5,10 +5,17 @@ function hideElement($id){
 
 function displaySelectedOptions() {
     const selectElement = document.getElementById('multi-select');
+    console.log(selectElement);
     const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.text);
+    console.log(selectedOptions);
+
     const selectedOptionsValue = Array.from(selectElement.selectedOptions).map(option => option.value);
+    console.log(selectedOptionsValue);
+
 
     const displayDiv = document.getElementById('selected-options');
+    console.log(displayDiv);
+
     const selectedOptionsInput = document.getElementById('selectedOptions');
     let currentContent = displayDiv.textContent;
     let currentInput = selectedOptionsInput.value;

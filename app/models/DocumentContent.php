@@ -6,6 +6,7 @@ class DocumentContent extends Content {
         try {
             // $this->conn->beginTransaction();
             parent::saveBaseContent($courseId, 'Document', $contentUrl);
+
             
             $stmt ="INSERT INTO ContentDocuments (content_id, document_format) VALUES (:content_id, :format)";
             $stmt = $this->conn->prepare($stmt);
@@ -19,5 +20,13 @@ class DocumentContent extends Content {
             throw new Exception("Error saving document content: " . $e->getMessage());
         }
     }
+
+    public function updateContent($contentId,$contentUrl,$format) {
+        parent::updateBaseContent($contentId, 'Document', $contentUrl);
+        $stmt = "UPDATE ContentDocuments SET document_format = :format WHERE content_id = :content_id";
+        $stmt = $this->conn->prepare($stmt);
+        $stmt->execute(['content_id' => $contentId, 'format' => $format ]);
+    }
+
 }
 ?>
