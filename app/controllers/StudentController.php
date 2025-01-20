@@ -70,6 +70,13 @@ class StudentController extends BaseController {
         }
         
     }
+    public function myCourses() {
+        $studentID = $_SESSION['user']['id'];
+        $data = [
+            'courses' => $this->EnrollmentModel->getStudentCourses($studentID),
+        ];
+        $this->render('student/myCourses',['data' => $data]);
+    }
 
     
 
