@@ -196,6 +196,66 @@ class Course extends Db {
         }
     }
 
+    // public function getStudentsByCourse($courseId) {
+    //     try {
+    //         $stmt = $this->conn->prepare("
+    //             SELECT 
+    //                 u.user_id,
+    //                 u.full_name,
+    //                 u.email,
+    //                 e.enrollment_date,
+    //                 e.grade,
+    //                 e.status
+    //             FROM Enrollments e
+    //             JOIN Users u ON e.student_id = u.user_id
+    //             WHERE e.course_id = :course_id
+    //             ORDER BY e.enrollment_date DESC
+    //         ");
 
+    //         $stmt->execute([':course_id' => $courseId]);
+    //         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    //     } catch (Exception $e) {
+    //         throw new Exception("Error fetching students by course: " . $e->getMessage());
+    //     }
+    // }
+
+    public function getTeacherEnrollmentsByCourse($teacherId) {
+        try {
+            $sql = "
+            SELECT 
+                courses.course_id  AS course_id,
+                courses.title AS course_title,
+                categories.category_name AS category_name,
+                Contents.content_type,
+                enrollments.student_id,
+                users.full_name AS student_name,
+                enrollments.enrollment_date,
+                enrollments.status
+            FROM 
+                courses
+            LEFT JOIN 
+                categories ON courses.category_id = categories.category_id
+            LEFT JOIN 
+                enrollments ON courses.course_id  = enrollments.course_id
+            LEFT JOIN 
+                users ON enrollments.student_id = users.user_id
+            JOIN Contents ON courses.course_id = Contents.content_id
+            WHERE 
+                courses.teacher_id = :teacher_id
+            ORDER BY 
+                courses.course_id , enrollments.enrollment_date DESC
+        ";
+    
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute(['teacher_id' => $teacherId]);
+    
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+        } catch (PDOException $e) {
+            throw new Exception("Erreur lors de la récupération des inscriptions : " . $e->getMessage());
+        }
+    }
 
 }
+
+

@@ -73,6 +73,7 @@ Route::get('/teacher/dashboard/manageMyCourses', [TeacherController::class, 'man
 Route::post('/teacher/addCourse', [TeacherController::class, 'addCourse']);
 Route::get('/teacher/deleteCourse/{course_id}', [TeacherController::class, 'deleteCourse']);
 Route::post('/teacher/modifyCourse', [TeacherController::class, 'modifyCourse']);
+Route::get('/teacher/dashboard/manegeEnrollmentsByCourse', [TeacherController::class, 'manegeEnrollmentsByCourse']);
 
 
 

@@ -10,7 +10,7 @@ class StudentController extends BaseController {
     public function studentDashboard() {
         $this->render('student/dashboard');
     }
-    
+
 
 
 

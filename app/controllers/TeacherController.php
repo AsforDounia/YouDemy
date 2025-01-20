@@ -97,7 +97,6 @@ class TeacherController extends BaseController {
                 $cdn,
                 $specificData
             );
-        
             // Si vous voulez aussi sauvegarder les tags
             if(!empty($tags) && !empty($tags_array)){
                 foreach ($tags_array as $tag) {
@@ -194,6 +193,36 @@ class TeacherController extends BaseController {
             ];
         }
     }
+
+    public function manegeEnrollmentsByCourse(){
+        $teacher_id = $_SESSION['user']['id'];
+        $results = $this->CourseModel->getTeacherEnrollmentsByCourse($teacher_id);
+        $data = [];
+        foreach ($results as $row) {
+            $courseId = $row['course_id'];
+    
+            if (!isset($data[$courseId])) {
+                $data[$courseId] = [
+                    'course_title' => $row['course_title'],
+                    'category_name' => $row['category_name'],
+                    'content_type' => $row['content_type'],
+                    'enrollments' => []
+                ];
+            }
+    
+            if (!empty($row['student_id'])) {
+                $data[$courseId]['enrollments'][] = [
+                    'student_name' => $row['student_name'],
+                    'enrollment_date' => $row['enrollment_date'],
+                    'status' => $row['status']
+                ];
+            }
+        }
+
+        $this->render('teacher/enrollmentsByCourse', $data);
+    }
+
+
 
 
 }
