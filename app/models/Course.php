@@ -51,7 +51,13 @@ class Course extends Db {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['content_url'];
     }
-
+    public function getCourseById($courseId, $teacherId) {
+        $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_id, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE courses.teacher_id = :teacher_id And courses.course_id = :course_id ;";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute(['teacher_id' => $teacherId, 'course_id' => $courseId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result;
+    }
     public function getTotalCourses() {
         $query = "SELECT COUNT(*) FROM courses";
         $stmt = $this->conn->prepare($query);
@@ -157,7 +163,6 @@ class Course extends Db {
     public function saveCourse($title, $description, $categoryId, $teacherId, Content $content, $contentUrl, $specificData) {
         try {
             // $this->conn->beginTransaction();
-            
             // Insert course
             $stmt = $this->conn->prepare("INSERT INTO Courses (title, description, category_id, teacher_id) VALUES (:title, :description, :category_id, :teacher_id)");
             $stmt->execute([
@@ -193,8 +198,8 @@ class Course extends Db {
                 'category' => $params['category'],
                 'course_id' => $params['course_id']
             ]);
-            $params['content']->updateContent($params['course_id'], $params['content_url'] , $params['specificData']);
             
+            $params['content']->updateContent($params['course_id'], $params['content_url'] , $params['specificData']);
         } catch (Exception $e) {
             throw new Exception("Error modifying course: " . $e->getMessage());
         }

@@ -26,10 +26,13 @@ class VideoContent extends Content {
     }
 
     public function updateContent($contentId,$contentUrl,$duration) {
+
         parent::updateBaseContent($contentId, 'Video', $contentUrl);
+        
         $stmt = "UPDATE ContentVideos SET video_duration = :duration WHERE content_id = :content_id";
         $stmt = $this->conn->prepare($stmt);
-        $stmt->execute(['content_id' => $contentId, 'format' => $duration ]);
+        $stmt->execute(['content_id' => $contentId, 'duration' => $duration ]);
+    
     }
 }
 ?>

@@ -19,10 +19,10 @@
             <?php include('partials/sidebar.php'); ?>
             <!-- Main -->
             <main class="flex-1 bg-gray-100 min-h-screen overflow-y-auto py-24 px-20">
-                <h1 class="text-xl font-bold text-gray-700 my-10">Users</h1>
-                <!-- fiter and search -->
+                <!-- <h1 class="text-xl font-bold text-gray-700 my-10">Users</h1>
+                
                 <div class="flex items-center justify-between space-x-4 bg-white p-4 px-8 rounded-lg shadow-md">
-                    <!-- Search Bar -->
+                   
                     <div class="flex items-center bg-gray-100 border border-gray-300 rounded px-3 w-3/4">
                         <i class="bx bx-search text-gray-400 text-lg"></i>
                         <input
@@ -30,13 +30,13 @@
                             placeholder="Search..."
                             class="w-full bg-transparent border-none outline-none py-2 px-2 text-gray-800" />
                     </div>
-                    <!-- User Role Dropdown -->
+                    
                     <select class="bg-gray-100 border border-gray-300 text-gray-800 py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/5">
                         <option value="teachers">All</option>
                         <option value="teachers">Teachers</option>
                         <option value="students">Students</option>
                     </select>
-                </div>
+                </div> -->
 
                 <!-- users table -->
                 <table class="min-w-full table-auto bg-white border border-gray-300 rounded-lg shadow-md mt-10">
@@ -69,7 +69,7 @@
                                     <a class="inline-block py-1 px-2 text-xs font-semibold <?= $user['status'] === 'Active' ? 'text-green-800 bg-green-100' : 'text-yellow-800 bg-yellow-100' ?> rounded-full" href="/admin/changeStatusOfUser/<?=$user['user_id']?>"><?= $user['status']; ?></a>
                                 </td>
                                 <td class="px-4 py-2 text-sm text-gray-600"><?= htmlspecialchars($user['created_at']) ?></td>
-                                <td class="px-4 py-2 text-sm text-gray-600"><a href="/admin/deleteUser/<?= $user['user_id']; ?>" onclick="return confirm('Are you sure you want to delete this user?')"  class="text-[#2E5077] hover:underline">Delete</a></td>
+                                <td class="px-4 py-2 text-sm text-gray-600"><a href="/admin/deleteUser/<?= $user['user_id']; ?>" onclick="return confirm('Are you sure you want to delete this user?')"  class="text-red-500 hover:underline">Delete</a></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

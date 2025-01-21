@@ -38,6 +38,14 @@ class TeacherController extends BaseController {
     public function manageMyCourses($form = null , $error = null) {
         $teacher_id = $_SESSION['user']['id'];
         $data = [];
+        if(isset($_GET['course_id'])){
+            $course_id = (int)$_GET['course_id'];
+            $data += [
+                'idModifyform' => $course_id ,
+                'course' => $this->CourseModel->getCourseById($course_id , $teacher_id ),
+            ];
+        }
+        $teacher_id = $_SESSION['user']['id'];
         if($form != null) {
             $data += [
                 'form' => $form,
@@ -119,6 +127,7 @@ class TeacherController extends BaseController {
 
     public function modifyCourse() {
         try {
+            
             // Validate and sanitize input data
             $courseId = (int)$_POST['course_id'];
             $title = $_POST[ 'title'];
@@ -127,15 +136,15 @@ class TeacherController extends BaseController {
             $contentType = $_POST[ 'type'];
             $contentUrl = $_POST[ 'cdn'];
             $tags = trim($_POST[ 'tags']);
-
+            
             // Input validation
-            if (empty($title) || empty($description) || empty($category) || empty($contentType) || empty($contentUrl)) {
+            if (empty($title) || empty($description)|| empty($contentUrl)) {
                 throw new Exception("All fields are required");
             }
-
+            
             // Start transaction
             // $this->conn->beginTransaction();
-
+            
             // Update course basic information
             
             $params = [
@@ -154,7 +163,7 @@ class TeacherController extends BaseController {
                     'content' => $content,
                     'specificData' => $specificData
                 ];
-            } else {
+            } elseif($contentType == 'Document') {
                 $content = new DocumentContent();
                 $specificData = strtoupper(pathinfo($contentUrl, PATHINFO_EXTENSION));
                 $params += [
@@ -167,11 +176,10 @@ class TeacherController extends BaseController {
 
             // Handle tags
             if (!empty($tags)) {
-                $this->TagModel->deleteCourseTags($courseId);
                 $tags_array = [];
                 $tags_array = array_filter(array_map('trim', explode(',', $tags)));
-
                 if(!empty($tags_array)){
+                    $this->TagModel->deleteCourseTags($courseId);
                     foreach ($tags_array as $tag) {
                         $tagId = (int)$tag ;
                         $this->TagModel->addCourseTags($tagId, $courseId);

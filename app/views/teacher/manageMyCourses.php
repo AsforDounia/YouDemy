@@ -41,82 +41,12 @@
                             <a href="/teacher/deleteCourse/<?= $course['course_id'] ?>" onclick="return confirm('Are you sure you want to delete this course?');" class="text-red-500">
                                 <i class="fa fa-trash-o text-xl"></i>
                             </a>
-                            <a href="/teacher/displayForm/modifyCourse" class=" text-blue-500">
+                            <a href="/teacher/dashboard/manageMyCourses?course_id=<?php echo $course['course_id']; ?>" class=" text-blue-500">
                                 <i class="fa fa-pencil-square-o text-xl"></i>
                             </a>
                         </div>
                     </div>
                 </div>
-                <?php if(isset($data['form']) && $data['form'] === 'modifyCourse') : ?>
-                    <div id="teacherModifyCourse" class="fixed bg-[rgba(0,0,0,0.9)] flex justify-center items-center p-6 w-screen h-screen top-0 left-0 z-50">
-                        <div class="bg-white p-6 pt-2 rounded-xl shadow w-1/3 max-h-3/4 overflow-auto">
-                            <div class="flex justify-end items-center ">
-                                <button onclick="hideElement('teacherModifyCourse')"><a href="/teacher/dashboard/manageMyCourses"><i class="fas fa-times text-indigo-600 hover:text-indigo-700 transition-colors"></i></a></button>
-                            </div>
-                            <form class="space-y-6" method="POST" action="/teacher/modifyCourse">
-                                <input type="hidden" value="<?= $course['course_id'] ?>" name="course_id">
-                                <div>
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                                    <input type="text" id="title" name="title" value="<?= $course['title'] ?>"
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                                        placeholder="Course Title">
-                                </div>
-                                <div>
-                                    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                                    <textarea id="description" name="description" class="text-left mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" placeholder="Course Description">
-                                        <?= $course['description']?>
-                                    </textarea>
-                                </div>
-
-                                <div>
-                                    <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
-                                    <select value="<?= $course['category_name']; ?>" id="category" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
-                                        <?php foreach ($data['categories'] as $category): ?>
-                                            <option value="<?php echo $category['category_id'] ?>" <?php echo ($category['category_id'] == $course['category_name']) ? 'selected' : ''; ?>><?php echo $category['category_name'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div>
-                                    <div>
-
-                                        <label for="multi-select" class="text-sm font-medium text-gray-700">Tags</label>
-                                        <span id="selected-options" class="mt-2 text-sm text-gray-500">
-                                            Selected M:
-                                        </span>
-                                    </div>
-                                    <input type="hidden" name="tags" id="selectedOptions" value="">
-                                    <select id="multi-select" name="" multiple class="h-16 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" 
-                                    onchange="displaySelectedOptions()">
-                                        <?php foreach ($data['tags'] as $tag): ?>
-                                            <option value="<?php echo $tag['tag_id'] ?>" ><?php echo $tag['tag_name'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                                <div >
-
-                                    <label for="type" class="block text-sm font-medium text-gray-700">Content Type</label>
-                                    <select id="type" name="type" vale="<?= $course['content_type'] ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
-                                        <option value="Video" <?php echo ($course['content_type'] == 'Video') ? 'selected' : ''; ?>>Video</option>
-                                        <option value="Document" <?php echo ($course['content_type'] == 'Document') ? 'selected' : ''; ?>>Document</option>
-                                    </select>
-                                </div>
-                                    <div>
-                                        <label for="cdn" class="block text-sm font-medium text-gray-700">Link</label>
-                                        <input value="<?= $course['content_url'] ?>" type="text" id="cdn" name="cdn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" />
-
-                                    </div>
-
-                                    <div>
-                                        <button type="submit"
-                                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            Modify Course
-                                        </button>
-                                    </div>
-                
-                            </form>
-                        </div>
-                    </div>
-                <?php endif ?>
             <?php endforeach; ?>
             </div>
             </main>
@@ -130,7 +60,7 @@
                 <div class="flex justify-end items-center ">
                     <button onclick="hideElement('teacherAddCourse')"><a href="/teacher/dashboard/manageMyCourses"><i class="fas fa-times text-indigo-600 hover:text-indigo-700 transition-colors"></i></a></button>
                 </div>
-                <form class="space-y-6" method="POST" action="/teacher/addCourse">
+                <form class="space-y-6" method="POST" action="/teacher/addCourse" id="addNewCourse">
                     <?php if(isset($_SESSION['error'])) : ?>
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
                             <?php echo $_SESSION['error']; ?>
@@ -193,6 +123,88 @@
                             <button type="submit"
                                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 Create Course
+                            </button>
+                        </div>
+    
+                </form>
+            </div>
+        </div>
+    <?php endif ?>
+
+
+
+    <?php if(isset($data['idModifyform'])) :
+        $course = $data['course'];?>
+        <div id="teacherModifyCourse" class="fixed bg-[rgba(0,0,0,0.9)] flex justify-center items-center p-6 w-screen h-screen top-0 left-0 z-50">
+            <div class="bg-white p-6 pt-2 rounded-xl shadow w-1/3">
+                <div class="flex justify-end items-center ">
+                    <button onclick="hideElement('teacherModifyCourse')"><a href="/teacher/dashboard/manageMyCourses"><i class="fas fa-times text-indigo-600 hover:text-indigo-700 transition-colors"></i></a></button>
+                </div>
+                <form class="space-y-6" method="POST" action="/teacher/modifyCourse" id="modifyCourse">
+                    <?php if(isset($_SESSION['error'])) : ?>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm">
+                            <?php echo $_SESSION['error']; ?>
+                            <?php unset($_SESSION['error']); ?>
+                        </div>
+                    <?php endif ; ?>
+                    <input type="hidden" value="<?= $course['course_id'] ?>" name="course_id">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                        <input type="text" id="title" name="title" value="<?= $course['title'] ?>"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                            placeholder="Course Title">
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="description" name="description" 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+                            placeholder="Course Description"><?= $course['description'] ?></textarea>
+                    </div>
+
+                    <div>
+                        <!-- <input type="hidden" value="<?= $course['category_id']  ?>" name="Oldcategory"> -->
+                        <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+                        <select id="category" name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" >
+                        
+                            <?php foreach ($data['categories'] as $category): ?>
+                                <option value="<?php echo $category['category_id'] ?>"><?php echo $category['category_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <div>
+
+                            <label for="multi-select" class="text-sm font-medium text-gray-700">Tags</label>
+                            <span id="selected-options" class="mt-2 text-sm text-gray-500">
+                                Selected :
+                            </span>
+                        </div>
+                        <input type="hidden" name="tags" id="selectedOptions" value=""/>
+                        <select id="multi-select" name="" multiple class="h-16 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" onchange="displaySelectedOptions()">
+                            <?php foreach ($data['tags'] as $tag): ?>
+                                <option value="<?= $tag['tag_id'] ?>" > <?= $tag['tag_name'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div >
+
+                        <label for="type" class="block text-sm font-medium text-gray-700">Content Type</label>
+                        <select id="type" name="type"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                            <option value="Video">Video</option>
+                            <option value="Document">Document</option>
+                        </select>
+                    </div>
+                        <div>
+                            <label for="cdn" class="block text-sm font-medium text-gray-700">Link</label>
+                            <input value=" <?= $course['content_url'] ?> " type="text" id="cdn" name="cdn" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" />
+
+                        </div>
+
+                        <div>
+                            <button type="submit"
+                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Modify Course
                             </button>
                         </div>
     
