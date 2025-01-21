@@ -9,11 +9,12 @@ class AuthController extends BaseController {
 
       
    }
-public function dashboardx(){
-    $this->render('admin/dashboardx');
+
+    public function dashboardx(){
+        $this->render('admin/dashboardx');
 
 
-}
+    }
 
     public function showLoginForm()
     {

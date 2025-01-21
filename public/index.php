@@ -11,6 +11,7 @@ require_once '../app/controllers/AuthController.php';
 require_once '../app/controllers/AdminController.php';
 require_once '../app/controllers/TeacherController.php';
 require_once '../app/controllers/StudentController.php';
+require_once '../app/controllers/HomeController.php';
 
 
 $router = new Router();
@@ -18,7 +19,7 @@ Route::setRouter($router);
 
 
 
-// Route::get('/', [AuthController::class, 'homePages']);
+Route::get('/', [HomeController::class, 'homePages']);
 Route::get('/login', [AuthController::class, 'showLoginForm']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm']);

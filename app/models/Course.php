@@ -21,13 +21,21 @@ class Course extends Db {
     // }
 
 
-    public function getAllCourses($teacherId = null) {
-        if ($teacherId != null) {
-            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE courses.teacher_id = :teacher_id GROUP BY courses.course_id ORDER BY courses.course_id;";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute(['teacher_id' => $teacherId]);
-        } else {
-            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+    public function getAllCourses($teacherId = null, $offset = null) {
+        if($offset === null){
+            if ($teacherId != null) {
+                $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE courses.teacher_id = :teacher_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+                $stmt = $this->conn->prepare($query);
+                $stmt->execute(['teacher_id' => $teacherId]);
+            } else {
+                $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id GROUP BY courses.course_id ORDER BY courses.course_id;";
+                $stmt = $this->conn->prepare($query);
+                $stmt->execute();
+            }
+        }
+        else{
+
+            $query = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id GROUP BY courses.course_id ORDER BY courses.course_id LIMIT 6 OFFSET $offset ;";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
         }
