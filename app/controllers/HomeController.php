@@ -24,25 +24,5 @@ class HomeController extends BaseController {
         $this->render('Home',$data);
 
        }
-    
-    //    public function paginateCourses($page = 1) {
-    //     $page = isset($_GET['page']) ? $_GET['page'] : 1;
-    //     $offset = ($page - 1) * 10;
-    //     $courses = $this->CourseModel->getAllCourses(null, $offset);
-    //     $totalCourses = $this->CourseModel->getTotalCourses();
-    //     $totalPages = ceil($totalCourses / 10);
-    //     return [
-    //         'courses' => $courses,
-    //         'totalPages' => $totalPages,
-    //         'currentPage' => $page,
-    //     ];
-    // }
-    // public function showAllCourses()
-    // {
-    //     $page = isset($_GET['page']) ? $_GET['page'] : 1;
-    //     $paginationData = $this->paginateCourses(3, $page);
-    //     $this->renderStudent('studentHome', ['courses' => $paginationData['courses'], 'paginationData' => $paginationData]);
-    // }
-
 
 }
