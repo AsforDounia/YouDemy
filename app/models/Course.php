@@ -183,18 +183,6 @@ class Course extends Db {
 
     public function modifyCourse($params) {
         try {
-            // $params = [
-            //     'title' => $title,
-            //     'description' => $description,
-            //     'category' => $category,
-            //     'content_type' => $contentType,
-            //     'content_url' => $contentUrl,
-            //     'course_id' => $courseId,
-            //     'content' => $content,
-            //     'specificData' => $specificData
-
-            // ];
-         
 
             $sql = "UPDATE courses SET title = :title, description = :description, category_id = :category WHERE course_id = :course_id";
             $stmt = $this->conn->prepare($sql);
@@ -270,6 +258,18 @@ class Course extends Db {
         } catch (PDOException $e) {
             throw new Exception("Erreur lors de la récupération des inscriptions : " . $e->getMessage());
         }
+    }
+
+
+
+    public function searchCourses($query, $offset)
+    {
+        $query = "%$query%";
+        $stmt = "SELECT courses.course_id, courses.title, courses.description, categories.category_name, users.full_name, users.profile_picture, contents.content_type, contents.content_url, GROUP_CONCAT(tags.tag_name ORDER BY tags.tag_name SEPARATOR ', ') AS tag_name FROM Courses AS courses INNER JOIN Categories AS categories ON courses.category_id = categories.category_id INNER JOIN Users AS users ON courses.teacher_id = users.user_id INNER JOIN Contents AS contents ON courses.course_id = contents.content_id LEFT JOIN CourseTags AS coursetags ON courses.course_id = coursetags.course_id LEFT JOIN Tags AS tags ON coursetags.tag_id = tags.tag_id WHERE courses.title LIKE :query OR courses.description LIKE :query GROUP BY courses.course_id ORDER BY courses.course_id LIMIT 6 OFFSET $offset;";
+        $stmt = $this->conn->prepare($stmt);
+        $stmt->bindParam(':query', $query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

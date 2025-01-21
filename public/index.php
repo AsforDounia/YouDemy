@@ -20,6 +20,9 @@ Route::setRouter($router);
 
 
 Route::get('/', [HomeController::class, 'homePages']);
+Route::get('/search-ajax', [HomeController::class, 'searchCoursesAjax']);
+
+
 Route::get('/login', [AuthController::class, 'showLoginForm']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegisterForm']);
@@ -86,7 +89,7 @@ Route::get('/student/student/enrollInCourse/{courseId}', [StudentController::cla
 
 
 
-Route::get('/dashboardx', [AuthController::class, 'dashboardx']);
+// Route::get('/dashboardx', [AuthController::class, 'dashboardx']);
 
 
 

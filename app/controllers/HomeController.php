@@ -23,6 +23,17 @@ class HomeController extends BaseController {
         ];
         $this->render('Home',$data);
 
-       }
+    }
+
+    public function searchCoursesAjax()
+    {
+        $query = $_GET['query'];
+        $courses = $this->CourseModel->searchCourses($query, 100, 0);
+        $response = [
+            'courses' => $courses
+        ];
+        echo json_encode($response);
+        exit;
+    }
 
 }

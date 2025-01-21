@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <title>Youdemy Platform</title>
 </head>
@@ -20,9 +21,16 @@
     <!-- <div class="flex"> -->
     
         <!-- Main Content -->
+        <div class="flex w-full px-20 py-4 justify-end bg-gray-100">
+                    <div class="relative w-1/3">
+                        <input id="search-input" type="text" placeholder="Search for courses..."
+                            class="w-full px-4 py-2 pl-10 pr-8 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-400" oninput="searchCourses(this.value)">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+        </div>
         <div class="flex flex-col flex-1 ">
             <!-- Main -->
-            <main class="flex-1 bg-gray-100 min-h-screen overflow-y-auto pt-24 px-20 pb-5">
+            <main class="flex-1 bg-gray-100 px-20 pb-5">
                 <div id="courses-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <?php foreach ($data['courses'] as $course): ?>
                         <div class="relative cursor-pointer bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow group">
