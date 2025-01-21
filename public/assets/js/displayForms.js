@@ -46,6 +46,49 @@ function displaySelectedOptions() {
     }
     
 }
+function displaySelectedOptions() {
+    const selectElement = document.getElementById('multi-select');
+    console.log(selectElement);
+    const selectedOptions = Array.from(selectElement.selectedOptions).map(option => option.text);
+    console.log(selectedOptions);
+
+    const selectedOptionsValue = Array.from(selectElement.selectedOptions).map(option => option.value);
+    console.log(selectedOptionsValue);
+
+
+    const displayDiv = document.getElementById('selected-options');
+    console.log(displayDiv);
+
+    const selectedOptionsInput = document.getElementById('selectedOptions');
+    let currentContent = displayDiv.textContent;
+    let currentInput = selectedOptionsInput.value;
+    let optionRemoved = false;
+    selectedOptions.forEach(option => {
+        if (currentContent.includes(option)) {
+            currentContent = currentContent.replace(option, '').replace(/,\s*,/g, ',').trim();
+            currentInput = currentInput.replace(option, '').replace(/,\s*,/g, ',').trim();
+            optionRemoved = true;
+            return;
+        }
+    });
+    selectedOptionsValue.forEach(option => {
+        if (currentInput.includes(option)) {
+            currentInput = currentInput.replace(option, '').replace(/,\s*,/g, ',').trim();
+            optionRemoved = true;
+            return;
+        }
+    });
+
+    if(optionRemoved){
+        displayDiv.textContent = currentContent;
+        selectedOptionsInput.value = currentInput;
+    }
+    else{
+        displayDiv.textContent = currentContent + (currentContent ? ' , ' : '') + selectedOptions.join(', ');
+        selectedOptionsInput.value = currentInput + (currentInput ? ', ' : '') + selectedOptionsValue.join(', ');
+    }
+    
+}
 
 function searchCourses(query) {
     if (query.length === 0) {
@@ -63,48 +106,44 @@ function searchCourses(query) {
         data.courses.forEach((course) => {
           const courseElement = document.createElement("div");
           courseElement.classList.add(
+            "relative",
+            "cursor-pointer",
             "bg-white",
             "rounded-xl",
             "shadow-md",
             "overflow-hidden",
             "hover:shadow-lg",
-            "transition-shadow"
+            "transition-shadow",
+            "group"
           );
           courseElement.innerHTML = `
-                      <img src="https://imgs.search.brave.com/EGqm4HJm7tNfNqNsYcEvAr0_fIb-EdneZ77mYaObBzE/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/c2N1LmVkdS9tZWRp/YS9tb2JpL3Nlc3Np/b24taW1hZ2VzLWFu/ZC1zY3JlZW5zaG90/cy9NQUItNTAweDUw/MC5wbmc" alt="Course thumbnail" class="w-full h-48 object-cover">
-                      <div class="p-6">
-                          <div class="flex items-center space-x-2 mb-2">
-                              <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">Development</span>
-                          </div>
-                          <h3 class="text-xl font-bold mb-2">${course.title}</h3>
-                          <p class="text-gray-600 mb-4 line-clamp-2">${
-                            course.description
-                          }</p>
-                          <div class="flex items-center justify-between">
-                              <div class="flex items-center space-x-2">
-                                  <img src="/api/placeholder/32/32" alt="Instructor" class="w-8 h-8 rounded-full">
-                                  <span class="text-sm text-gray-600">John Doe</span>
-                              </div>
-                              ${
-                                data.user_role === "student"
-                                  ? `
-                                  <div class="flex items-center space -x-4">
-                                      <a href="#" class="bg-white text-indigo-600 px-6 py-2 rounded-lg font-semibold hover:bg-indigo-50 transition-colors">
-                                          Enroll
-                                      </a>
-                                  </div>
-                              `
-                                  : `
-                                  <div class="flex items-center space-x-4">
-                                      <a href="login" class="bg-red-50 text-red-600 px-6 py-2 rounded-lg font-semibold hover:bg-red-100 transition-colors">
-                                          Log In First
-                                      </a>
-                                  </div>
-                              `
-                              }
-                          </div>
-                      </div>
-                  `;
+            <div onclick="window.location.href='/login'" class="absolute w-full h-full  justify-center items-center bg-opacity-80 hidden top-0 right-0 p-4 bg-blue-800 text-white group-hover:flex">
+                Log in to see the Content
+            </div>
+            <img src="https://dummyimage.com/120" alt="Course thumbnail" class="w-full h-48 object-cover">
+            <div class="h-28">
+                <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
+                    <h3 class="text-xl font-bold">${course.title}</h3>
+                    <span class="px-2 py-1 bg-indigo-100 text-indigo-800 text-xs rounded-full">${course.category_name}</span>
+                </div>
+                <p class="text-gray-600 line-clamp-2 p-4">${course.description}</p>
+            </div>
+            <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
+                            <span class="text-sm text-gray-600">${course.full_name}</span>
+                            <?php if (!$course['profile_picture']): ?>
+                                <div class="w-14 h-14 flex items-center justify-center bg-gray-200 text-gray-500 text-xs rounded-full">
+                                    No Pic
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+            <div class="pb-4 flex justify-between items-center px-4">
+                <p class="text-blue-500 line-clamp-2 px-4">${course.tag_name}</p>
+                <div>
+                </div>
+            </div>
+          `;
           coursesContainer.appendChild(courseElement);
         });
       })

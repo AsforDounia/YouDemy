@@ -38,12 +38,21 @@
                         </div>
                         <p class="text-gray-600 line-clamp-2 p-4"><?php echo $course['description'] ?></p>
                     </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2 justify-between w-full px-4 py-1">
+                            <span class="text-sm text-gray-600"><?= $course['full_name']; ?></span>
+                            <?php if (!$course['profile_picture']): ?>
+                                <div class="w-14 h-14 flex items-center justify-center bg-gray-200 text-gray-500 text-xs rounded-full">
+                                    No Pic
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                     <div class="pb-4 flex justify-between items-center px-4">
                         <p class="text-blue-500 line-clamp-2 px-4"><?php echo $course['tag_name'] ?></p>
-                        <div>
+                    <div>
                             <form action="/student/displayCourse" method="post">
                                 <input type="hidden" value="<?= $course['course_id'] ?>" name="course_id">
-                                
                                     <?php
                                     $courseExist = false;
                                     foreach($studentCourses as $stdcourse) :

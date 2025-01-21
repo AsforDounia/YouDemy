@@ -15,7 +15,6 @@ class HomeController extends BaseController {
         $totalCourses = $this->CourseModel->getTotalCourses();
         $totalPages = ceil($totalCourses / 6);
 
-        
         $data = [
             'courses' => $courses,
             'totalPages' => $totalPages,
@@ -25,15 +24,16 @@ class HomeController extends BaseController {
 
     }
 
-    public function searchCoursesAjax()
-    {
-        $query = $_GET['query'];
-        $courses = $this->CourseModel->searchCourses($query, 100, 0);
-        $response = [
-            'courses' => $courses
-        ];
-        echo json_encode($response);
-        exit;
+
+
+    public function searchCoursesAjax(){
+    $query = $_GET['query'];
+    $courses = $this->CourseModel->searchCourses($query, 0);
+    $response = [
+        'courses' => $courses,
+    ];
+    echo json_encode($response);
+    exit;
     }
 
 }
