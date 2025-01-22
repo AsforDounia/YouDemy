@@ -20,6 +20,10 @@ class TeacherController extends BaseController {
         $this->manageMyCourses($form);
     }
     public function teacherDashboard() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
+            header('Location: /login');
+            exit;
+        }
         $teacher_id = $_SESSION['user']['id'];
         // var_dump($teacher_id);die();
         $totalEnrollments = $this->EnrollmentModel->getTotalEnrollments($teacher_id);
@@ -36,6 +40,10 @@ class TeacherController extends BaseController {
         $this->render('teacher/dashboard', $data);
     }
     public function manageMyCourses($form = null , $error = null) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
+            header('Location: /login');
+            exit;
+        }
         $teacher_id = $_SESSION['user']['id'];
         $data = [];
         if(isset($_GET['course_id'])){
@@ -203,6 +211,10 @@ class TeacherController extends BaseController {
     }
 
     public function manegeEnrollmentsByCourse(){
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Teacher') {
+            header('Location: /login');
+            exit;
+        }
         $teacher_id = $_SESSION['user']['id'];
         $results = $this->CourseModel->getTeacherEnrollmentsByCourse($teacher_id);
         $data = [];

@@ -24,7 +24,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
                         
                         <!-- Enrollments Card -->
-                        <div  onclick="window.location.href='/teacher/dashboard/totalEnrollments'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
+                        <div  onclick="window.location.href='/teacher/dashboard/manegeEnrollmentsByCourse'" class="bg-white p-6 rounded-xl shadow cursor-pointer hover:shadow-lg">
                             <div class="flex items-center">
                                 <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center">
                                     <i class="fas fa-users fa-2x fa-inverse text-black "></i>

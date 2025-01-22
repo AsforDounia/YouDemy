@@ -10,6 +10,10 @@ class StudentController extends BaseController {
         $this->EnrollmentModel = new Enrollment();
     }
     public function studentDashboard($courseIdDisplay = null) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
+            header('Location: /login');
+            exit;
+        }
         $data = [];
         $data += [
             'courses' => $this->CourseModel->getAllCourses(),
@@ -58,6 +62,10 @@ class StudentController extends BaseController {
         
     }
     public function myCourses() {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Student') {
+            header('Location: /login');
+            exit;
+        }
         $studentID = $_SESSION['user']['id'];
         $data = [
             'courses' => $this->EnrollmentModel->getStudentCourses($studentID),
