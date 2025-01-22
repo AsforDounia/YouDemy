@@ -28,17 +28,6 @@ class User extends Db {
 
 
 
-    // public function createNewUser($userData)
-    // {
-    //     $query = "INSERT INTO users (full_name, email, password, role) VALUES (:full_name, :email, :password, :role)";
-    //     $stmt = $this->conn->prepare($query);
-    //     $stmt->bindParam(':full_name', $userData['name']);
-    //     $stmt->bindParam(':email', $userData['email']);
-    //     $stmt->bindParam(':password', $userData['password']);
-    //     $stmt->bindParam(':role', $userData['role']);
-    //     return $stmt->execute();
-    // }
-
 
     public function createNewUser($userData){
     

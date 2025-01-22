@@ -6,8 +6,6 @@ abstract class Content extends Db {
     protected function saveBaseContent($courseId, $contentType, $contentUrl) {
         try {
 
-            // die();
-
             $sql = "INSERT INTO Contents (content_id, content_type, content_url) VALUES (:content_id, :content_type, :content_url)";
             $stmt = $this->conn->prepare($sql);
 
@@ -33,8 +31,8 @@ abstract class Content extends Db {
         } catch (PDOException $e) {
             throw new Exception("Error updating content: " . $e->getMessage());
         }
-                
-    }   
+
+    }
     abstract public function save($courseId, $contentUrl, $specificData);
 }
 ?>

@@ -19,16 +19,6 @@ class Admin extends User {
     }
 
 
-    public function searchUsers($search_value){
-        $query = "SELECT * FROM users WHERE user_id != :user_id AND (username LIKE :search_value OR email LIKE :search_value) GROUP BY role";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':user_id', $_SESSION['user']['id']);
-        $stmt->bindParam(':search_value', '%' . $search_value . '%');
-        $stmt->execute();
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $users;
-    }
-
     public function changeStatusOfUser($userId, $status) {
         try {
             $stmt = $this->conn->prepare("UPDATE users SET status = ? WHERE user_id = ?");

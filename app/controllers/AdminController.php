@@ -118,12 +118,12 @@ class AdminController extends BaseController
 
     }
 
-    public function displayRoleForm($user_id){
-        $this->manageUsers($user_id);
+    // public function displayRoleForm($user_id){
+    //     $this->manageUsers($user_id);
         // $user = $this->UserModel->findByID($user_id);
 
         // $userRole = $this->UserModel->findRole($user_id);
-    }
+    // }
 
     // public function changeUserRole(){
     //     $user_id = (int)$_POST['user_id'];
@@ -308,31 +308,5 @@ class AdminController extends BaseController
 
 
 
-    public function pagination()
-    {
-        $recordsTotalSQL = $this->AdminModel->getTotalUsers();
-        $start = intval($_GET['start'] ?? 0);
-        var_dump($start);
-        echo "zertyuio";
-        die();
-        $length = intval($_GET['length'] ?? 10);
-        $search_value = $_GET['search']['value'] ?? '';
 
-        if (!empty($search_value)) {
-            $users = $this->AdminModel->searchUsers($search_value);
-        }
-        else{
-            $users = $this->AdminModel->getAllUsers($start , $length);
-        }
-
-
-        $returned = [
-            "recordsTotal" => $recordsTotalSQL,
-            "recordsFiltered" => $recordsTotalSQL,
-            "draw" => $_GET['draw'] ?? 0,
-            "data" => $users
-        ];
-
-        echo json_encode($returned);
-    }
 }

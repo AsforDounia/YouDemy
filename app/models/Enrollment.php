@@ -36,18 +36,6 @@ class Enrollment extends Db {
         }
     }
 
-    // public function getStudentCourses($studentID){
-    //     try{
-    //         $query = "SELECT * FROM enrollments WHERE student_id = :studentID";
-    //         $stmt = $this->conn->prepare($query);
-    //         $stmt->bindParam(':studentID', $studentID);
-    //         $stmt->execute();
-    //         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //         return $result;
-    //     } catch (PDOException $e) {
-    //         echo 'ERROR: ' . $e->getMessage();
-    //     }
-    // }
 
 
     public function getStudentCourses($studentID) {

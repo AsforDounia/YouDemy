@@ -37,7 +37,7 @@ Route::post('/admin/AddUser', [AuthController::class, 'register']);
 
 Route::get('/admin/dashboard/manageUsers', [AdminController::class, 'manageUsers']);
 Route::get('/admin/changeStatusOfUser/{user_id}', [AdminController::class, 'changeStatusOfUser']);
-Route::get('/admin/displayRoleForm/{user_id}', [AdminController::class, 'displayRoleForm']);
+// Route::get('/admin/displayRoleForm/{user_id}', [AdminController::class, 'displayRoleForm']);
 // Route::post('/admin/ChangeUserRole', [AdminController::class, 'changeUserRole']);
 Route::get('/admin/deleteUser/{user_id}', [AdminController::class, 'deleteUser']);
 
@@ -63,10 +63,6 @@ Route::post('/admin/editTag', [AdminController::class, 'editTag']);
 
 
 
-
-
-
-// Route::get('/pagination', [AdminController::class, 'pagination']);
 
 
 
